@@ -37,14 +37,15 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const { name, business, site, pain } = req.body || {};
-  if (!name || !business) {
+  const { name, contact, business, site, pain } = req.body || {};
+  if (!name || !contact || !business) {
     res.status(400).json({ error: 'Missing required fields' });
     return;
   }
 
   // Обрезаем длину полей на сервере — защита от мусорных гигантских payload
   const clean = s => String(s || '').slice(0, 500);
+  const contactLooksLikeEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean(contact).trim());
 
   try {
     const transporter = nodemailer.createTransport({
@@ -58,11 +59,12 @@ module.exports = async function handler(req, res) {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
-      replyTo: undefined, // визитор не оставляет свой email в этой форме — при желании можно добавить поле
+      replyTo: contactLooksLikeEmail ? clean(contact).trim() : undefined,
       subject: `Free Audit request — ${clean(business)}`,
       text: `New free audit request from the website.
 
 Name: ${clean(name)}
+Contact (email/WhatsApp): ${clean(contact)}
 Business: ${clean(business)}
 Current website: ${clean(site) || '—'}
 Biggest frustration: ${clean(pain) || '—'}`
