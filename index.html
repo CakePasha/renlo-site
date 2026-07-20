@@ -354,6 +354,23 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .af-done .big{font-size:40px;margin-bottom:14px}
 .af-done h3{font-size:20px;margin-bottom:8px}
 .af-done p{font-size:14px;color:var(--muted)}
+
+/* animated success state */
+.af-check{width:76px;height:76px;margin:0 auto 20px}
+.af-check circle{stroke:var(--green);stroke-width:3;fill:none;stroke-dasharray:220;stroke-dashoffset:220;
+  animation:circleDraw .7s cubic-bezier(.2,.7,.2,1) forwards}
+.af-check path{stroke:var(--green);stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:40;stroke-dashoffset:40;animation:checkDraw .4s .55s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes circleDraw{to{stroke-dashoffset:0}}
+@keyframes checkDraw{to{stroke-dashoffset:0}}
+.af-done .fade-in{opacity:0;transform:translateY(10px);animation:doneFade .5s ease forwards}
+@keyframes doneFade{to{opacity:1;transform:none}}
+.af-done h3.fade-in{animation-delay:.85s}
+.af-done p.fade-in{animation-delay:1s}
+.af-done .spam-note{opacity:0;transform:translateY(10px);animation:doneFade .5s ease forwards;animation-delay:1.15s;
+  margin-top:18px;display:inline-flex;align-items:center;gap:9px;background:var(--amber-soft);
+  border:1px solid rgba(255,180,84,.3);border-radius:100px;padding:9px 18px;font-family:var(--font-m);
+  font-size:12px;color:var(--amber)}
 @media(max-width:980px){.audit-wrap{grid-template-columns:1fr}}
 /* scroll progress */
 #progress{position:fixed;top:0;left:0;height:2.5px;width:0;background:linear-gradient(90deg,var(--amber),#FFE3B8);z-index:99;box-shadow:0 0 12px rgba(255,180,84,.6)}
@@ -818,6 +835,7 @@ footer .legal a:hover{color:var(--amber)}
     <div class="audit-form reveal-r">
       <div id="af-fields">
         <div class="af-field"><label>Your name</label><input id="af-name" type="text" placeholder="John Smith" maxlength="80"></div>
+        <div class="af-field"><label>Email or WhatsApp number</label><input id="af-contact" type="text" placeholder="john@business.com or +1 555 123 4567" maxlength="120"></div>
         <div class="af-field"><label>Business name</label><input id="af-biz" type="text" placeholder="e.g. Kane &amp; Crow Barbers" maxlength="120"></div>
         <div class="af-field"><label>Current website (optional)</label><input id="af-site" type="text" placeholder="https://" maxlength="200"></div>
         <div class="af-field"><label>Biggest frustration right now</label><textarea id="af-pain" rows="3" placeholder="e.g. people message to ask prices instead of booking" maxlength="400"></textarea></div>
@@ -827,7 +845,7 @@ footer .legal a:hover{color:var(--amber)}
       <div class="af-done" id="af-done">
         <div class="big">📬</div>
         <h3>Opening WhatsApp…</h3>
-        <p>Your audit request is pre-filled — just press send. We'll reply with your 3–5 findings within 48 hours.</p>
+        <p>Your audit request is pre-filled — just press send.</p>
       </div>
     </div>
   </div>
@@ -1153,9 +1171,10 @@ document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=
   if(!btn)return;
   btn.addEventListener('click',async()=>{
     const v=id=>document.getElementById(id).value.trim();
-    const name=v('af-name'),biz=v('af-biz'),site=v('af-site'),pain=v('af-pain');
-    if(!name||!biz){
-      document.getElementById(name?'af-biz':'af-name').focus();
+    const name=v('af-name'),contact=v('af-contact'),biz=v('af-biz'),site=v('af-site'),pain=v('af-pain');
+    if(!name||!contact||!biz){
+      const missing=!name?'af-name':(!contact?'af-contact':'af-biz');
+      document.getElementById(missing).focus();
       return;
     }
     btn.disabled=true;
@@ -1164,14 +1183,21 @@ document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=
       const res=await fetch('/api/audit',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name,business:biz,site,pain})
+        body:JSON.stringify({name,contact,business:biz,site,pain})
       });
       if(!res.ok)throw new Error('send failed');
       document.getElementById('af-fields').style.display='none';
-      document.getElementById('af-done').style.display='block';
-      document.getElementById('af-done').querySelector('h3').textContent='Request sent ✅';
-      document.getElementById('af-done').querySelector('.big').textContent='📬';
-      document.getElementById('af-done').querySelector('p').textContent="We've got your audit request — we'll reply with your 3–5 findings within 48 hours.";
+      const done=document.getElementById('af-done');
+      done.style.display='block';
+      done.innerHTML=`
+        <svg class="af-check" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="38" cy="38" r="35"/>
+          <path d="M22 39 L33 50 L54 27"/>
+        </svg>
+        <h3 class="fade-in">Request sent</h3>
+        <p class="fade-in">Please allow up to 2 business days — we'll email you with your 3–5 findings.</p>
+        <div class="spam-note">📥 Please also check your spam folder, just in case</div>
+      `;
     }catch(e){
       btn.disabled=false;
       btn.textContent='Request my free audit →';
