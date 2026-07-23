@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bright Smile Dental — Modern Family &amp; Cosmetic Dentistry</title>
+<meta name="description" content="Concept website built by Renlo — Bright Smile Dental, a modern dental clinic with online booking and a 24/7 AI front desk.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBFEFC; --panel:#fff; --mint:#EAF7F5; --mint-2:#DCF3F0; --ink:#0E3238; --muted:#5C7C7E;
+  --teal:#0B8F8F; --teal-deep:#075F5F; --teal-glow:rgba(11,143,143,.35); --coral:#FF8B6B; --coral-glow:rgba(255,139,107,.35);
+  --line:rgba(14,50,56,.1); --glass-bg:rgba(255,255,255,.55); --glass-line:rgba(255,255,255,.7);
+  --font-d:'Fraunces',serif; --font-b:'Inter',sans-serif; --font-m:'IBM Plex Mono',monospace;
+  --radius:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height:1.6;overflow-x:hidden}
+h1,h2,h3{font-family:var(--font-d);letter-spacing:-.01em;line-height:1.08;font-weight:600}
+img{max-width:100%;display:block}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+.eyebrow{font-family:var(--font-m);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--teal)}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-b);font-weight:700;font-size:14.5px;padding:15px 28px;border-radius:100px;text-decoration:none;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+.btn-teal{background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;box-shadow:0 10px 30px var(--teal-glow)}
+.btn-teal:hover{transform:translateY(-2px);box-shadow:0 16px 40px var(--teal-glow)}
+.btn-teal::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.5) 45%,transparent 60%);transform:translateX(-120%);transition:transform .7s}
+.btn-teal:hover::after{transform:translateX(120%)}
+.btn-line{background:rgba(255,255,255,.5);color:var(--ink);border:1.5px solid var(--line);backdrop-filter:blur(8px)}
+.btn-line:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ---- glass utility ---- */
+.glass{background:var(--glass-bg);border:1px solid var(--glass-line);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);
+  box-shadow:0 8px 32px rgba(14,50,56,.08),inset 0 1px 0 rgba(255,255,255,.6)}
+.glow-blob{position:absolute;border-radius:50%;filter:blur(60px);z-index:0;pointer-events:none}
+
+/* ---- back-to-renlo utility bar ---- */
+.renlo-bar{position:sticky;top:0;z-index:70;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(90deg,#0E3238,#0B8F8F,#0E3238);color:#fff;padding:11px 16px;font-family:var(--font-m);font-size:12.5px;
+  letter-spacing:.03em;text-align:center;flex-wrap:wrap}
+.renlo-bar b{color:#FFD9B0}
+.renlo-back{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+  color:#fff;text-decoration:none;padding:6px 15px;border-radius:100px;font-weight:600;transition:background .2s,transform .2s}
+.renlo-back:hover{background:rgba(255,255,255,.3);transform:translateX(-3px)}
+
+/* nav */
+nav{position:sticky;top:38px;z-index:60;display:flex;justify-content:space-between;align-items:center;
+  margin:14px clamp(14px,3vw,40px) 0;padding:12px 22px;border-radius:100px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--font-d);font-weight:700;font-size:19px}
+.logo-mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;color:#fff;font-size:17px;box-shadow:0 6px 16px var(--teal-glow)}
+.nav-links{display:flex;gap:30px;align-items:center}
+.nav-links a{color:var(--ink);text-decoration:none;font-size:14.5px;font-weight:500}
+.nav-links a:hover{color:var(--teal)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px}
+.nav-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0}
+
+/* hero */
+.hero{position:relative;min-height:94vh;display:flex;align-items:flex-end;padding:70px clamp(20px,5vw,48px) 90px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:112%;object-fit:cover;will-change:transform}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(7,20,22,.86) 5%,rgba(7,20,22,.4) 55%,rgba(7,20,22,.12) 100%)}
+.hero-inner{position:relative;z-index:1;max-width:680px;color:#fff}
+.hero h1{perspective:700px}
+.hero h1 .hw{display:inline-block}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:100px;margin-bottom:26px;font-family:var(--font-m);font-size:12px;color:#fff;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(14px)}
+.hero-badge .stars{color:#FFC876;letter-spacing:2px}
+.hero h1{font-size:clamp(40px,5.6vw,74px);margin-bottom:22px;color:#fff}
+.hero h1 em{font-style:italic;background:linear-gradient(90deg,#FFD9B0,#FFB37A,#FFD9B0);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:-220% 0}}
+.hero p{font-size:17.5px;color:#DCEEED;max-width:480px;margin-bottom:34px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero-scroll{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.75);font-family:var(--font-m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.hero-scroll i{width:1px;height:34px;background:linear-gradient(180deg,rgba(255,255,255,.8),transparent);position:relative;overflow:hidden}
+.hero-scroll i::after{content:"";position:absolute;top:-100%;left:0;width:100%;height:100%;background:#fff;animation:scrollDown 1.8s ease-in-out infinite}
+@keyframes scrollDown{to{top:100%}}
+
+/* trust strip */
+.trust{background:var(--mint);padding:22px clamp(20px,5vw,48px)}
+.trust-row{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;font-family:var(--font-m);font-size:12.5px;letter-spacing:.05em;color:var(--teal-deep);text-transform:uppercase}
+
+section{padding:110px 0;position:relative}
+.sec-head{max-width:640px;margin:0 auto 52px;text-align:center;position:relative;z-index:1}
+.sec-head h2{font-size:clamp(30px,3.8vw,44px)}
+.gs{opacity:0;transform:translateY(38px)}
+
+/* services */
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative;z-index:1}
+.svc-card{position:relative;border-radius:var(--radius);padding:32px 26px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;overflow:hidden}
+.svc-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(11,143,143,.16)}
+.svc-icon{width:54px;height:54px;border-radius:15px;background:linear-gradient(135deg,var(--mint-2),var(--mint));display:grid;place-items:center;font-size:25px;margin-bottom:22px;box-shadow:inset 0 1px 0 #fff;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.svc-card:hover .svc-icon{transform:scale(1.1) rotate(-6deg)}
+.svc-card h3{font-size:19px;margin-bottom:10px;font-weight:600}
+.svc-card p{font-size:14px;color:var(--muted);margin-bottom:16px}
+.svc-price{font-family:var(--font-m);font-size:12.5px;color:var(--teal);font-weight:600}
+.svc-card.featured{border:1.5px solid var(--teal)}
+.svc-badge{position:absolute;top:16px;right:16px;background:var(--teal);color:#fff;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:100px;box-shadow:0 6px 16px var(--teal-glow)}
+
+/* ---- AI receptionist showcase (centerpiece) ---- */
+.ai-section{background:linear-gradient(180deg,#0E3238,#0A2529);border-radius:40px;margin:0 clamp(14px,3vw,40px);padding:90px clamp(24px,6vw,72px);overflow:hidden;position:relative;color:#fff}
+.ai-section .glow-blob-1{width:420px;height:420px;background:var(--teal);opacity:.35;top:-140px;left:-100px}
+.ai-section .glow-blob-2{width:360px;height:360px;background:var(--coral);opacity:.22;bottom:-120px;right:-80px}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;position:relative;z-index:1}
+.ai-copy .eyebrow{color:#FFD9B0}
+.ai-copy .eyebrow::before{background:#FFD9B0}
+.ai-copy h2{color:#fff;font-size:clamp(30px,3.6vw,44px);margin-bottom:20px}
+.ai-copy p{color:#B9DAD8;font-size:16.5px;margin-bottom:30px;max-width:460px}
+.ai-pulse-cta{display:inline-flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+  padding:14px 22px 14px 16px;border-radius:100px;backdrop-filter:blur(10px)}
+.ai-pulse-dot{width:38px;height:38px;border-radius:50%;background:var(--coral);display:grid;place-items:center;font-size:17px;position:relative;flex-shrink:0}
+.ai-pulse-dot::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--coral);animation:pulseRing 2s ease-out infinite}
+@keyframes pulseRing{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.ai-pulse-cta span{font-family:var(--font-d);font-weight:600;font-size:15.5px}
+.ai-stats{display:flex;gap:30px;margin-top:36px}
+.ai-stat b{display:block;font-family:var(--font-d);font-size:28px;color:#FFD9B0}
+.ai-stat span{font-size:12px;color:#8FB4B1;text-transform:uppercase;letter-spacing:.04em;font-family:var(--font-m)}
+
+.ai-phone{position:relative;z-index:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:26px;
+  backdrop-filter:blur(20px);box-shadow:0 40px 90px rgba(0,0,0,.4);overflow:hidden;max-width:400px;margin:0 auto}
+.ai-phone-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05)}
+.ai-phone-head .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;font-size:17px}
+.ai-phone-head .nm{font-weight:600;font-size:14px;color:#fff}
+.ai-phone-head .st{font-family:var(--font-m);font-size:10.5px;color:#7CFFC0;display:flex;align-items:center;gap:5px}
+.ai-phone-head .st::before{content:"";width:6px;height:6px;border-radius:50%;background:#7CFFC0;box-shadow:0 0 8px #7CFFC0;animation:dotPulse 1.8s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ai-phone-float{animation:phoneFloat 5s ease-in-out infinite}
+@keyframes phoneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.ai-phone-body{padding:20px;display:flex;flex-direction:column;gap:12px;min-height:290px}
+.ai-msg{max-width:82%;padding:11px 15px;border-radius:14px;font-size:13.5px;line-height:1.5;opacity:0;transform:translateY(10px)}
+.ai-msg.c{align-self:flex-start;background:rgba(255,255,255,.1);color:#EAF7F5;border-bottom-left-radius:4px}
+.ai-msg.a{align-self:flex-end;background:var(--teal);color:#fff;border-bottom-right-radius:4px;box-shadow:0 6px 20px var(--teal-glow)}
+.ai-typing{align-self:flex-start;display:flex;gap:4px;padding:12px 15px;background:rgba(255,255,255,.1);border-radius:14px;border-bottom-left-radius:4px;opacity:0}
+.ai-typing i{width:6px;height:6px;border-radius:50%;background:#B9DAD8;animation:typingDot 1.2s infinite}
+.ai-typing i:nth-child(2){animation-delay:.2s}.ai-typing i:nth-child(3){animation-delay:.4s}
+@keyframes typingDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.ai-phone-input{display:flex;align-items:center;gap:10px;padding:14px 16px;border-top:1px solid rgba(255,255,255,.14)}
+.ai-phone-input .fake-input{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:100px;padding:10px 16px;color:#8FB4B1;font-size:13px}
+.ai-phone-input .snd{width:38px;height:38px;border-radius:50%;background:var(--coral);display:grid;place-items:center;flex-shrink:0;box-shadow:0 6px 18px var(--coral-glow)}
+
+/* gallery */
+.gallery-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;height:560px;position:relative;z-index:1}
+.gallery-grid a{border-radius:var(--radius);overflow:hidden;position:relative;display:block}
+.gallery-grid a:first-child{grid-row:1/3}
+.gallery-grid img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.gallery-grid a:hover img{transform:scale(1.07)}
+.g-cap{position:absolute;left:14px;bottom:14px;color:#fff;font-family:var(--font-m);font-size:11px;padding:6px 13px;border-radius:100px;
+  background:rgba(10,20,20,.45);backdrop-filter:blur(8px);opacity:0;transform:translateY(6px);transition:.25s}
+.gallery-grid a:hover .g-cap{opacity:1;transform:none}
+.gallery-grid a::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.35),transparent 40%)}
+
+/* process */
+.process-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;position:relative;z-index:1}
+.process-grid::before{content:"";position:absolute;top:34px;left:14%;right:14%;height:2px;background:repeating-linear-gradient(90deg,var(--teal) 0 10px,transparent 10px 20px);opacity:.4;z-index:0}
+.proc-card{position:relative;text-align:center;z-index:1}
+.proc-num{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;display:grid;place-items:center;
+  font-family:var(--font-d);font-size:24px;margin:0 auto 22px;box-shadow:0 14px 34px var(--teal-glow)}
+.proc-card h3{font-size:18px;margin-bottom:10px}
+.proc-card p{font-size:14px;color:var(--muted);max-width:260px;margin:0 auto}
+
+/* about */
+.about{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center;position:relative;z-index:1}
+.about-media{position:relative;border-radius:var(--radius);overflow:hidden}
+.about-media img{aspect-ratio:4/5;object-fit:cover}
+.about-stats{display:flex;gap:0;margin-top:34px;border-top:1px solid var(--line);padding-top:26px}
+.about-stat{flex:1}
+.about-stat b{display:block;font-family:var(--font-d);font-size:32px;color:var(--teal)}
+.about-stat span{font-size:13px;color:var(--muted)}
+
+/* location map */
+.map-card{position:relative;height:420px;border-radius:var(--radius);overflow:hidden;background:linear-gradient(160deg,#0a2226,#071617);z-index:1}
+.map-frame{position:absolute;inset:0;filter:invert(1) hue-rotate(165deg) brightness(.92) contrast(.9) saturate(.65)}
+.map-frame iframe{width:100%;height:100%;border:0;display:block;pointer-events:none}
+.map-tint{position:absolute;inset:0;background:linear-gradient(160deg,rgba(11,143,143,.22),rgba(4,15,17,.55) 70%);mix-blend-mode:multiply;pointer-events:none}
+.map-fade{position:absolute;inset:0;box-shadow:inset 0 0 70px 20px #0a2226;pointer-events:none}
+.map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);z-index:2}
+.map-pin-dot{position:relative;display:block;width:14px;height:14px;border-radius:50%;background:var(--teal);box-shadow:0 0 22px var(--teal)}
+.map-pin-pulse{position:absolute;inset:-9px;border-radius:50%;border:2px solid var(--teal);animation:pinPulse 2.2s ease-out infinite}
+@keyframes pinPulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(2.4);opacity:0}}
+.map-pin-label{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(10,25,26,.78);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.16);padding:9px 16px;border-radius:12px;text-align:center}
+.map-pin-label b{display:block;font-family:var(--font-d);font-size:14px;color:#fff;font-weight:600}
+.map-pin-label span{font-size:11px;color:#8FB4B1;font-family:var(--font-m)}
+
+/* faq */
+.faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px;position:relative;z-index:1}
+.faq-item{border:1px solid var(--line);border-radius:14px;padding:4px 24px;background:var(--panel);transition:border-color .2s}
+.faq-item[open]{border-color:rgba(11,143,143,.35)}
+.faq-item summary{cursor:pointer;padding:18px 0;font-family:var(--font-d);font-weight:600;font-size:16.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'+';font-size:22px;color:var(--teal);transition:transform .25s;flex-shrink:0}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item p{padding-bottom:20px;color:var(--muted);font-size:14.5px;margin:0;line-height:1.6}
+
+/* testimonials */
+.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;position:relative;z-index:1}
+.testi-card{border-radius:var(--radius);padding:38px 34px}
+.testi-card blockquote{font-family:var(--font-d);font-size:19px;font-weight:500;line-height:1.45;margin-bottom:18px}
+.testi-card cite{font-family:var(--font-m);font-size:12px;letter-spacing:.06em;color:var(--teal);font-style:normal}
+
+/* booking CTA */
+.cta-band{background:linear-gradient(120deg,var(--teal),var(--teal-deep));border-radius:32px;padding:70px clamp(24px,6vw,80px);display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;color:#fff;position:relative;overflow:hidden;z-index:1}
+.cta-band h2{color:#fff;font-size:clamp(28px,3.6vw,40px);max-width:480px;position:relative;z-index:1}
+.cta-band .btn-line{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.08);position:relative;z-index:1}
+.cta-band .btn-line:hover{background:#fff;color:var(--teal-deep)}
+
+/* footer */
+footer{background:#0E3238;color:#B9D6D4;padding:70px 0 30px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px}
+.footer-brand p{font-size:13.5px;color:#8FB4B1;margin-top:14px;max-width:260px}
+.footer-col h4{font-family:var(--font-m);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#EAF7F5;margin-bottom:16px}
+.footer-col a{display:block;color:#B9D6D4;text-decoration:none;font-size:14px;margin-bottom:10px}
+.footer-col a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:#7BA09D}
+
+/* floating small launcher (secondary, the big showcase above is primary) */
+.ai-widget{position:fixed;right:20px;bottom:20px;z-index:60}
+.ai-launcher{width:58px;height:58px;border-radius:50%;background:var(--teal);color:#fff;border:none;display:grid;place-items:center;font-size:23px;cursor:pointer;box-shadow:0 14px 34px var(--teal-glow);transition:transform .2s}
+.ai-launcher:hover{transform:scale(1.06)}
+
+@media(max-width:980px){
+  .nav-links{display:none}
+  .nav-toggle{display:block}
+  .services-grid{grid-template-columns:repeat(2,1fr)}
+  .ai-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;height:auto}
+  .gallery-grid a:first-child{grid-row:auto;grid-column:1/3;height:280px}
+  .gallery-grid a{height:180px}
+  .process-grid{grid-template-columns:1fr;gap:40px}
+  .process-grid::before{display:none}
+  .about{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .services-grid{grid-template-columns:1fr}
+  .about-stats{flex-wrap:wrap;row-gap:16px}
+  .about-stat{flex:0 0 50%}
+  .footer-grid{grid-template-columns:1fr}
+  .cta-band{flex-direction:column;align-items:flex-start}
+  nav{top:0}
+  .renlo-bar{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<div class="renlo-bar">
+  <span>👋 You're viewing a <b>website concept</b> made by RENLO</span>
+  <a href="../index.html#work" class="renlo-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+    Back to Renlo
+  </a>
+</div>
+
+<nav class="glass">
+  <a href="#top" class="logo"><span class="logo-mark">✦</span> Bright Smile Dental</a>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#assistant">AI Assistant</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#reviews">Reviews</a>
+  </div>
+  <a href="#book" class="btn btn-teal">Book a Visit</a>
+  <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="hero" id="top" style="padding-top:70px">
+  <div class="hero-bg">
+    <img id="heroImg" src="https://images.pexels.com/photos/305567/pexels-photo-305567.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Bright modern dental clinic room">
+  </div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="stars">★★★★★</span> 4.9 from 640+ patients</div>
+    <h1>Dentistry that feels like <em>self-care</em>, not a chore.</h1>
+    <p>Cleanings, cosmetic work and emergency care from a team that actually explains what's happening — with an AI front desk that answers the moment you reach out.</p>
+    <div class="hero-cta">
+      <a href="#book" class="btn btn-teal">Book Your Visit →</a>
+      <a href="#assistant" class="btn btn-line" style="color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.1)">Meet the AI assistant</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><i></i>Scroll</div>
+</section>
+
+<div class="trust">
+  <div class="trust-row">
+    <span>✓ Same-week appointments</span>
+    <span>✓ Most PPO insurance accepted</span>
+    <span>✓ 0% financing available</span>
+    <span>✓ Open Sat &amp; evenings</span>
+  </div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head gs">
+      <div class="eyebrow" style="justify-content:center">What we do</div>
+      <h2>Care built around your actual life</h2>
+    </div>
+    <div class="services-grid">
+      <div class="svc-card glass gs featured">
+        <span class="svc-badge">Most booked</span>
+        <div class="svc-icon">🪥</div>
+        <h3>Cleanings &amp; Checkups</h3>
+        <p>Twice-yearly visits, gentle hygienists, clear next steps every time.</p>
+        <div class="svc-price">From $89</div>
+      </div>
+      <div class="svc-card glass gs">
+        <div class="svc-icon">✨</div>
+        <h3>Whitening</h3>
+        <p>In-office or take-home trays — visible results in one visit.</p>
+        <div class="svc-price">From $220</div>
+      </div>
+      <div class="svc-card glass gs">
+        <div class="svc-icon">😁</div>
+        <h3>Invisalign</h3>
+        <p>Straighten quietly, on your schedule, with 3D-mapped progress.</p>
+        <div class="svc-price">From $3,200</div>
+      </div>
+      <div class="svc-card glass gs">
+        <div class="svc-icon">🚑</div>
+        <h3>Emergency Care</h3>
+        <p>Toothache today? We hold same-day slots for exactly this.</p>
+        <div class="svc-price">From $65</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AI RECEPTIONIST SHOWCASE ============ -->
+<section id="assistant">
+  <div class="ai-section">
+    <div class="glow-blob glow-blob-1"></div>
+    <div class="glow-blob glow-blob-2"></div>
+    <div class="ai-grid">
+      <div class="ai-copy gs">
+        <div class="eyebrow">Never miss a patient</div>
+        <h2>Ready to book?<br>Just ask.</h2>
+        <p>Every visitor is greeted by an assistant that knows your real prices, real schedule and real availability — and books straight into your calendar, day or night.</p>
+        <div class="ai-pulse-cta">
+          <span class="ai-pulse-dot">💬</span>
+          <span>Ask it something below →</span>
+        </div>
+        <div class="ai-stats">
+          <div class="ai-stat"><b id="cnt-answered">0</b><span>Answered today</span></div>
+          <div class="ai-stat"><b>&lt;5s</b><span>Response time</span></div>
+          <div class="ai-stat"><b>24/7</b><span>Always on</span></div>
+        </div>
+      </div>
+      <div class="ai-phone-float">
+      <div class="ai-phone gs">
+        <div class="ai-phone-head">
+          <div class="av">🦷</div>
+          <div><div class="nm">Bright Smile Assistant</div><div class="st">Online now</div></div>
+        </div>
+        <div class="ai-phone-body" id="aiChatBody"></div>
+        <div class="ai-phone-input">
+          <div class="fake-input">Type a message…</div>
+          <div class="snd">➤</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="sec-head gs">
+      <div class="eyebrow" style="justify-content:center">In the clinic</div>
+      <h2>A calmer kind of dental visit</h2>
+    </div>
+    <div class="gallery-grid gs">
+      <a href="#"><img src="https://images.pexels.com/photos/4269265/pexels-photo-4269265.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Bright dental treatment room"><span class="g-cap">Treatment room</span></a>
+      <a href="#"><img src="https://images.pexels.com/photos/4971500/pexels-photo-4971500.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Smiling patient during checkup"><span class="g-cap">Happy patient</span></a>
+      <a href="#"><img src="https://images.pexels.com/photos/7800666/pexels-photo-7800666.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Dental team examining patient"><span class="g-cap">Our team</span></a>
+      <a href="#"><img src="https://images.pexels.com/photos/5622280/pexels-photo-5622280.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Happy patient high-fiving dentist"><span class="g-cap">Great outcomes</span></a>
+      <a href="#"><img src="https://images.pexels.com/photos/3845744/pexels-photo-3845744.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Smiling patient holding mirror"><span class="g-cap">New smile</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head gs">
+      <div class="eyebrow" style="justify-content:center">Booking, simplified</div>
+      <h2>From "ouch" to appointment in under a minute</h2>
+    </div>
+    <div class="process-grid">
+      <div class="proc-card gs"><div class="proc-num">1</div><h3>Message anytime</h3><p>Text the assistant on the site, day or night — no phone tag, no hold music.</p></div>
+      <div class="proc-card gs"><div class="proc-num">2</div><h3>Get real availability</h3><p>It checks the actual calendar and offers slots that are genuinely open.</p></div>
+      <div class="proc-card gs"><div class="proc-num">3</div><h3>Confirmed instantly</h3><p>Your visit lands on the calendar automatically — confirmation sent both ways.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="about">
+      <div class="about-media gs">
+        <img src="https://images.pexels.com/photos/6812569/pexels-photo-6812569.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Dentist and assistant examining a patient">
+      </div>
+      <div class="gs">
+        <div class="eyebrow">Why patients switch to us</div>
+        <h2 style="font-size:clamp(26px,3.4vw,38px);margin-bottom:18px">Twelve years, one philosophy: explain everything, rush nothing.</h2>
+        <p class="muted" style="max-width:480px">Dr. Chen and her team built Bright Smile around the appointments people usually dread — by making them fast, honest about cost upfront, and genuinely comfortable.</p>
+        <div class="about-stats">
+          <div class="about-stat"><b>12+</b><span>Years in the neighborhood</span></div>
+          <div class="about-stat"><b>9,800</b><span>Happy patients treated</span></div>
+          <div class="about-stat"><b>4.9★</b><span>Average patient rating</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="location">
+  <div class="wrap">
+    <div class="sec-head gs">
+      <div class="eyebrow" style="justify-content:center">Find us</div>
+      <h2>Right in the neighborhood</h2>
+    </div>
+    <div class="map-card gs">
+      <div class="map-frame">
+        <iframe loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-117.4455%2C33.9406%2C-117.3055%2C34.0206&layer=mapnik" title="Map of Riverside, CA near Bright Smile Dental"></iframe>
+      </div>
+      <div class="map-tint"></div>
+      <div class="map-fade"></div>
+      <div class="map-pin" style="left:50%;top:50%">
+        <span class="map-pin-pulse"></span>
+        <span class="map-pin-dot"></span>
+        <div class="map-pin-label"><b>Bright Smile Dental</b><span>128 Maple St, Riverside CA</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="wrap">
+    <div class="sec-head gs">
+      <div class="eyebrow" style="justify-content:center">Reviews</div>
+      <h2>Words from our patients</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card glass gs">
+        <blockquote>"I used to put off the dentist for years. Now I actually look forward to it — and I booked this appointment from my phone at midnight."</blockquote>
+        <cite>— Priya M., patient since 2022</cite>
+      </div>
+      <div class="testi-card glass gs">
+        <blockquote>"Asked the site's assistant a price question at 11pm just to test it. Had a real answer and a booked slot before I put my phone down."</blockquote>
+        <cite>— David O., patient since 2024</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head gs">
+      <div class="eyebrow" style="justify-content:center">Fair questions</div>
+      <h2>Before you book</h2>
+    </div>
+    <div class="faq-list gs">
+      <details class="faq-item">
+        <summary>Do you accept my insurance? <span></span></summary>
+        <p>We're in-network with most major PPO plans and happy to check your specific coverage before your visit — just ask the assistant or front desk and we'll confirm what's covered.</p>
+      </details>
+      <details class="faq-item">
+        <summary>I'm nervous about the dentist — is that okay here?</summary>
+        <p>Very common, and the whole reason we built the practice this way. We explain every step before we do it, never rush, and can pause any time you need. No judgment, ever.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I really get seen same-day for an emergency?</summary>
+        <p>Yes — we hold same-day slots specifically for exactly this. Message the assistant describing what's going on and it'll offer the next real opening.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do you offer payment plans for bigger treatments?</summary>
+        <p>Yes, 0% financing is available for treatments like Invisalign or larger restorative work — the assistant can walk you through options before you commit to anything.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="book">
+  <div class="wrap">
+    <div class="cta-band gs">
+      <h2>Your smile can't wait for Monday.</h2>
+      <a href="#assistant" class="btn btn-line">Ask the Assistant →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo" style="color:#EAF7F5"><span class="logo-mark">✦</span> Bright Smile Dental</a>
+        <p>128 Maple Street, Suite 4, Riverside · Mon–Fri 8–6, Sat 9–2</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#reviews">Reviews</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="tel:+15551234567">(555) 123-4567</a>
+        <a href="mailto:hello@brightsmile.example">hello@brightsmile.example</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Bright Smile Dental. All rights reserved.</span>
+      <span>Fictional concept business — <a href="../index.html#work" style="color:#7BA09D">built to demo a Renlo website ↗</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="ai-widget">
+  <button class="ai-launcher" id="aiLauncher" aria-label="Chat" onclick="document.getElementById('assistant').scrollIntoView({behavior:'smooth'})">💬</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* hero headline: 3D word-by-word reveal (premium load-in moment) */
+(function(){
+  const h1=document.querySelector('.hero h1');
+  if(!h1)return;
+  function wrapWords(node){
+    [...node.childNodes].forEach(child=>{
+      if(child.nodeType===3){
+        const frag=document.createDocumentFragment();
+        child.nodeValue.split(/(\s+)/).forEach(part=>{
+          if(part===''){return;}
+          if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(part));return;}
+          const s=document.createElement('span');
+          s.className='hw';s.textContent=part;
+          frag.appendChild(s);
+        });
+        node.replaceChild(frag,child);
+      }else if(child.nodeType===1){
+        if(child.tagName==='EM'||child.tagName==='SPAN'){
+          child.classList.add('hw');
+        }else{
+          wrapWords(child);
+        }
+      }
+    });
+  }
+  wrapWords(h1);
+  const words=h1.querySelectorAll('.hw');
+  gsap.set(words,{opacity:0,y:44,rotateX:-75,transformOrigin:'50% 100%'});
+  gsap.to(words,{opacity:1,y:0,rotateX:0,duration:.85,stagger:.045,ease:'power3.out',delay:.15});
+})();
+
+/* hero parallax */
+gsap.to('#heroImg',{yPercent:14,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+
+/* generic reveal for .gs elements */
+document.querySelectorAll('.gs').forEach((el,i)=>{
+  gsap.to(el,{
+    opacity:1,y:0,duration:.9,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%'}
+  });
+});
+/* stagger service + gallery + process cards */
+[['.services-grid','.svc-card'],['.gallery-grid','.gallery-grid a'],['.process-grid','.proc-card'],['.testi-grid','.testi-card'],['.faq-list','.faq-item']].forEach(([wrap,sel])=>{
+  const items=document.querySelectorAll(wrap+' '+sel);
+  gsap.set(items,{opacity:0,y:30});
+  gsap.to(items,{
+    opacity:1,y:0,duration:.7,stagger:.12,ease:'power3.out',
+    scrollTrigger:{trigger:wrap,start:'top 85%'}
+  });
+});
+
+/* count-up stat */
+function countUp(el,to,dur){
+  gsap.fromTo(el,{innerText:0},{innerText:to,duration:dur,snap:{innerText:1},ease:'power1.out',
+    scrollTrigger:{trigger:el,start:'top 90%',once:true}});
+}
+countUp(document.getElementById('cnt-answered'),47,1.6);
+
+/* AI phone chat demo, triggered when scrolled into view, loops */
+(function(){
+  const body=document.getElementById('aiChatBody');
+  const script=[
+    {who:'c',text:'My tooth hurts 😖 anything tomorrow?'},
+    {who:'a',text:'Of course — 9:30 or 11:00 work?'},
+    {who:'c',text:'9:30 please 🙏'},
+    {who:'a',text:'Booked ✅ See you at 9:30!'}
+  ];
+  let playing=false;
+  function play(){
+    if(playing)return;playing=true;
+    body.innerHTML='';
+    let t=200;
+    script.forEach((m)=>{
+      setTimeout(()=>{
+        if(m.who==='a'){
+          const ty=document.createElement('div');ty.className='ai-typing';ty.innerHTML='<i></i><i></i><i></i>';
+          body.appendChild(ty);gsap.to(ty,{opacity:1,duration:.3});
+          setTimeout(()=>{
+            ty.remove();
+            addBubble(m);
+          },900);
+        }else{
+          addBubble(m);
+        }
+      },t);
+      t+= m.who==='a' ? 1600 : 1500;
+    });
+    setTimeout(()=>{playing=false;},t+3000);
+  }
+  function addBubble(m){
+    const d=document.createElement('div');
+    d.className='ai-msg '+m.who;
+    d.textContent=m.text;
+    body.appendChild(d);
+    gsap.to(d,{opacity:1,y:0,duration:.4,ease:'power2.out'});
+    body.scrollTop=body.scrollHeight;
+  }
+  ScrollTrigger.create({trigger:'#assistant',start:'top 70%',onEnter:play,onEnterBack:play});
+})();
+</script>
+</body>
+</html>
