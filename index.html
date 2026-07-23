@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RENLO — Websites with an AI receptionist that never sleeps</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070A12'/%3E%3Ctext x='50' y='69' font-family='Arial,Helvetica,sans-serif' font-weight='900' font-size='58' fill='%23FFB454' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -32,6 +33,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height
 .orb{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
 .orb-1{width:520px;height:520px;background:rgba(255,180,84,.10);top:-120px;right:-100px}
 .orb-2{width:420px;height:420px;background:rgba(78,124,255,.08);top:40%;left:-160px}
+.spotlight{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .4s;
+  background:radial-gradient(480px circle at var(--sx,50%) var(--sy,50%),rgba(255,180,84,.09),transparent 70%)}
+.hero:hover .spotlight{opacity:1}
+.orb-play{position:fixed;top:14%;right:6%;width:640px;height:640px;border-radius:50%;filter:blur(130px);z-index:0;pointer-events:none;
+  background:hsla(var(--play-hue,24),85%,58%,.055)}
 
 h1,h2,h3{font-family:var(--font-d);letter-spacing:-.02em;line-height:1.05}
 .eyebrow{font-family:var(--font-m);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:10px}
@@ -48,8 +54,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:
 .nav-links a:hover,.nav-links a:focus-visible{color:var(--ink)}
 .nav-links a.btn-amber,.nav-links a.btn-amber:hover{color:#000}
 .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-d);font-weight:700;font-size:14px;
-  padding:12px 22px;border-radius:100px;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease;cursor:pointer;border:none}
+  padding:12px 22px;border-radius:100px;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease;cursor:pointer;border:none;position:relative;overflow:hidden}
 .btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.55) 45%,transparent 60%);transform:translateX(-130%);transition:transform .65s ease}
+.btn:hover::after{transform:translateX(130%)}
 .btn-amber{background:var(--amber);color:#000;font-weight:800}
 .btn-amber:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,180,84,.35)}
 .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
@@ -60,6 +68,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:
 /* hero */
 .hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,64px);align-items:center;
   padding:130px clamp(20px,5vw,64px) 70px;max-width:1440px;margin:0 auto;position:relative}
+.hero>*{min-width:0}
 .hero-left>*:not(h1){opacity:0;transform:translateY(22px);animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
 .hero-left>*:nth-child(2){animation-delay:.12s}
 .hero-left>*:nth-child(3){animation-delay:.24s}
@@ -73,7 +82,7 @@ img.emj{width:1.22em;height:1.22em;vertical-align:-0.24em;display:inline-block}
 h1{font-size:clamp(42px,5.6vw,86px);font-weight:900;margin-bottom:26px}
 h1 .w{display:inline-block;opacity:0;transform:translateY(.55em);animation:wordUp .65s cubic-bezier(.2,.7,.2,1) forwards}
 @keyframes wordUp{to{opacity:1;transform:none}}
-h1 .accent{position:relative;white-space:nowrap;
+h1 .accent{position:relative;
   background:linear-gradient(90deg,#FFB454 0%,#FFE3B8 45%,#FFB454 90%);background-size:220% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent}
 h1 .accent.w{animation:wordUp .65s cubic-bezier(.2,.7,.2,1) forwards,shine 5.5s 1.2s linear infinite}
@@ -168,7 +177,8 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .pipe-panel .ph{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);
   font-family:var(--font-m);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .pipe-panel .ph b{color:var(--amber);font-weight:500}
-.pipe-chat{padding:18px;display:flex;flex-direction:column;gap:11px;min-height:330px}
+.pipe-chat{padding:18px;display:flex;flex-direction:column;gap:11px;height:360px;overflow-y:auto;scrollbar-width:none}
+.pipe-chat::-webkit-scrollbar{display:none}
 .pmsg{max-width:86%;padding:10px 14px;border-radius:15px;font-size:13.5px;line-height:1.5;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s}
 .pmsg.show{opacity:1;transform:none}
 .pmsg.cust{background:var(--raise-2);border:1px solid var(--line);border-bottom-left-radius:5px;align-self:flex-start}
@@ -202,7 +212,7 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .pipe-stats{display:flex;justify-content:center;gap:clamp(24px,6vw,80px);margin-top:56px;text-align:center}
 .pst .v{font-family:var(--font-d);font-weight:900;font-size:clamp(30px,3.4vw,48px);color:var(--amber)}
 .pst .l{font-family:var(--font-m);font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
-.cal-rel{position:relative;min-height:330px}
+.cal-rel{position:relative;height:360px}
 
 /* cards */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -240,7 +250,11 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .card.lost:hover::before{opacity:.4}
 
 /* steps */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative}
+.steps-connector{position:absolute;top:-26px;left:16.6%;right:16.6%;height:2px;background:var(--line);z-index:5;pointer-events:none}
+.steps-connector i{position:absolute;top:50%;left:0;width:12px;height:12px;margin-top:-6px;margin-left:-6px;border-radius:50%;
+  background:var(--amber);box-shadow:0 0 18px 3px rgba(255,180,84,.65);z-index:5}
+@media(max-width:980px){.steps-connector{display:none}}
 .step{border:1px solid var(--line);border-radius:var(--radius);padding:36px 30px;background:linear-gradient(180deg,var(--raise),transparent);position:relative}
 .step .num{font-family:var(--font-m);font-size:12px;color:var(--amber);letter-spacing:.12em;margin-bottom:20px}
 .step h3{font-size:20px;margin-bottom:12px}
@@ -257,45 +271,36 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .work-card{background:var(--raise);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
   transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s;display:flex;flex-direction:column}
 .work-card:hover{transform:translateY(-8px);border-color:rgba(255,180,84,.45);box-shadow:0 30px 70px rgba(0,0,0,.5),0 0 50px rgba(255,180,84,.08)}
-.work-browser{padding:10px 10px 0}
+
+/* browser-chrome banner: makes it instantly readable as "a real website" + which one */
+.work-browser{display:block;text-decoration:none;color:inherit;padding:10px 10px 0}
 .wb-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:var(--raise-2);border:1px solid var(--line);border-bottom:none;border-radius:10px 10px 0 0}
 .wb-bar i{width:8px;height:8px;border-radius:50%;background:var(--line)}
 .wb-bar span{font-family:var(--font-m);font-size:10px;color:var(--muted);margin-left:8px;background:var(--bg);padding:3px 10px;border-radius:5px}
-/* illustrated scenes */
-.work-scene{position:relative;height:280px;overflow:hidden;border-radius:12px;margin:10px 10px 0}
-.work-scene svg{position:absolute;inset:0;width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
-.work-card:hover .work-scene svg{transform:scale(1.05)}
-.scene-label{position:absolute;top:12px;left:12px;z-index:3;font-family:var(--font-m);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
-  padding:6px 12px;border-radius:100px;color:#fff;background:rgba(10,12,18,.55);border:1px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.ws-launcher{position:absolute;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
-  font-size:16px;box-shadow:0 8px 22px rgba(0,0,0,.4);animation:bob 3.2s ease-in-out infinite;z-index:3}
-.lb-dental{background:#0B8F8F}.lb-barber{background:#E4573D}.lb-auto{background:#FFB454}
-.sc-dental .wb-msg.c{background:#fff;color:#0E3238;border:1px solid rgba(14,50,56,.12);box-shadow:0 4px 14px rgba(14,50,56,.18)}
-.sc-dental .wb-msg.a{background:#0B8F8F;color:#fff;box-shadow:0 4px 14px rgba(11,143,143,.35)}
-.sc-barber .wb-msg.c{background:rgba(30,15,19,.85);color:#F3E6D2;border:1px solid rgba(243,230,210,.2);backdrop-filter:blur(4px)}
-.sc-barber .wb-msg.a{background:#E4573D;color:#fff;box-shadow:0 4px 14px rgba(228,87,61,.4)}
-.sc-auto .wb-msg.c{background:rgba(18,22,28,.85);color:#ECEFF4;border:1px solid rgba(236,239,244,.18);backdrop-filter:blur(4px)}
-.sc-auto .wb-msg.a{background:#FFB454;color:#161000;box-shadow:0 4px 14px rgba(255,180,84,.4)}
-/* looping chat over the mini-site */
-.wb-chat{position:absolute;right:10px;bottom:56px;width:62%;height:146px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;overflow:hidden;pointer-events:none;z-index:2}
-.wb-msg{max-width:95%;padding:7px 11px;border-radius:11px;font-size:11.5px;line-height:1.4;opacity:0;animation:wbLoop 10s infinite;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.wb-msg.c{align-self:flex-start;border-bottom-left-radius:4px}
-.wb-msg.a{align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
-.wb-msg:nth-child(1){animation-delay:.6s}
-.wb-msg:nth-child(2){animation-delay:2.2s}
-.wb-msg:nth-child(3){animation-delay:3.8s}
-.wb-msg:nth-child(4){animation-delay:5.4s}
-@keyframes wbLoop{0%{opacity:0;transform:translateY(8px)}4%,78%{opacity:1;transform:none}88%,100%{opacity:0;transform:translateY(-4px)}}
+.wb-bar .wb-tag{margin-left:auto;font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);
+  background:rgba(255,180,84,.12);border:1px solid rgba(255,180,84,.3);padding:4px 10px;border-radius:100px;white-space:nowrap}
+
+/* live scaled-down preview of the actual concept site */
+.wb-frame{position:relative;height:280px;overflow:hidden;border-radius:0 0 12px 12px;background:#0c0f16}
+.wb-frame iframe{position:absolute;top:0;left:0;width:1440px;border:0;transform-origin:top left;pointer-events:none;background:#fff}
+.wb-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(7,10,18,.35) 0%,transparent 30%);pointer-events:none}
+.wb-open{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:10px;
+  letter-spacing:.06em;color:#fff;background:rgba(10,12,18,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);
+  padding:8px 13px;border-radius:100px;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+.work-card:hover .wb-open{opacity:1;transform:none}
 .work-info{padding:22px 24px 26px;display:flex;flex-direction:column;flex:1}
 .work-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .work-tags span{font-family:var(--font-m);font-size:9.5px;letter-spacing:.12em;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:100px}
 .work-tags .wt-amber{color:var(--amber);border-color:rgba(255,180,84,.35)}
 .work-info h3{font-size:20px;margin-bottom:8px}
 .work-info p{font-size:14px;color:var(--muted);margin-bottom:20px;flex:1}
-.work-cta{font-family:var(--font-d);font-weight:700;font-size:14px;padding:13px;border-radius:100px;cursor:pointer;
-  background:transparent;color:var(--amber);border:1px solid rgba(255,180,84,.4);transition:all .25s}
+.work-actions{display:flex;gap:10px;flex-wrap:wrap}
+.work-cta{font-family:var(--font-d);font-weight:700;font-size:13.5px;padding:13px;border-radius:100px;cursor:pointer;
+  background:transparent;color:var(--amber);border:1px solid rgba(255,180,84,.4);transition:all .25s;
+  flex:1;min-width:150px;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
 .work-cta:hover{background:var(--amber);color:#000;box-shadow:0 8px 28px rgba(255,180,84,.35)}
+.work-cta-ghost{color:var(--ink);border-color:var(--line)}
+.work-cta-ghost:hover{background:transparent;color:var(--amber);border-color:var(--amber);box-shadow:none}
 @media(max-width:980px){.work-grid{grid-template-columns:1fr}}
 
 
@@ -489,10 +494,12 @@ footer .legal a:hover{color:var(--amber)}
 .case-stats{display:flex;gap:36px;margin-top:30px}
 .cs .v{font-family:var(--font-d);font-weight:800;font-size:34px;color:var(--amber)}
 .cs .l{font-size:13px;color:var(--muted);font-family:var(--font-m)}
+@media(max-width:980px){.case{grid-template-columns:1fr}.case-stats{flex-wrap:wrap;row-gap:20px}}
 </style>
 </head>
 <body>
 <canvas id="sky" aria-hidden="true"></canvas>
+<div class="orb-play" aria-hidden="true"></div>
 <div class="content">
 
 <nav>
@@ -509,17 +516,18 @@ footer .legal a:hover{color:var(--amber)}
 </nav>
 
 <header class="hero" id="top">
+  <div class="spotlight" id="spotlight"></div>
   <div class="orb orb-1"></div>
   <div class="hero-left">
-    <div class="clockline">LOCAL TIME <b id="clock">03:12</b> · SOMEWHERE, A CUSTOMER IS MESSAGING A BUSINESS THAT'S CLOSED</div>
-    <h1>Your business sleeps.<br><span class="accent">Your leads don't.</span></h1>
-    <p class="hero-sub">We build websites with an AI receptionist that answers every inquiry, books appointments and captures leads — in seconds, in any language. During the morning rush, on your day off, and yes, at 3 AM.</p>
+    <div class="clockline">RIGHT NOW <b id="clock">03:12</b> · A CUSTOMER IS MESSAGING A BUSINESS THAT CAN'T ANSWER</div>
+    <h1>Someone should always answer.<br><span class="accent">Now, someone does.</span></h1>
+    <p class="hero-sub">We build websites with an AI receptionist that replies in seconds, books real appointments and captures every lead — while you're with a customer, off for the day, or asleep. You focus on the work; it handles the front desk.</p>
     <div class="hero-cta">
       <a class="btn btn-wa" href="https://wa.me/490000000000" target="_blank" rel="noopener">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.7.1.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.3 1.8Z"/></svg>
         Message us on WhatsApp
       </a>
-      <a class="btn btn-ghost" href="#night">Watch one night →</a>
+      <a class="btn btn-ghost" href="#night">See it in action →</a>
     </div>
     <div class="hero-note"><span class="live"></span> The assistant on the right is live. Go ahead — try to book something.</div>
   </div>
@@ -528,9 +536,9 @@ footer .legal a:hover{color:var(--amber)}
   <div class="phone" id="demo">
     <div class="live-strip"><i></i>LIVE DEMO — TALK TO IT</div>
     <div class="tabs" role="tablist" aria-label="Demo industry">
-      <button class="tab active" data-persona="dental" role="tab">🦷 Dental clinic</button>
-      <button class="tab" data-persona="barber" role="tab">💈 Barbershop</button>
-      <button class="tab" data-persona="auto" role="tab">🔧 Auto shop</button>
+      <button class="tab active" data-persona="dental" role="tab">🦷 Bright Smile</button>
+      <button class="tab" data-persona="barber" role="tab">💈 Fade District</button>
+      <button class="tab" data-persona="auto" role="tab">🔧 Torque Auto</button>
     </div>
     <div class="chat-head">
       <div class="avatar" id="chat-avatar">🦷</div>
@@ -553,9 +561,9 @@ footer .legal a:hover{color:var(--amber)}
 
 <div class="night-strip" aria-hidden="true">
   <div class="marquee" id="marquee">
-    <span>22:47 — "do you have anything tomorrow morning?" <b>→ answered, booked</b></span>
+    <span>12:05 — "any slots today? on my lunch break" <b>→ answered, booked</b></span>
     <span>01:15 — "how much is a brake check?" <b>→ answered, lead captured</b></span>
-    <span>03:12 — "are you open Saturday?" <b>→ answered instantly</b></span>
+    <span>14:40 — texts while you're with another customer <b>→ answered instantly</b></span>
     <span>05:30 — "can I reschedule my appointment?" <b>→ handled, calendar updated</b></span>
     <span>23:58 — "do you speak German?" <b>→ ja, natürlich</b></span>
   </div>
@@ -565,9 +573,9 @@ footer .legal a:hover{color:var(--amber)}
 <section class="pipeline" id="night">
   <div class="orb orb-2"></div>
   <div class="sec-head reveal">
-    <div class="eyebrow">Watch it happen</div>
-    <h2>One night with your assistant.</h2>
-    <p>This is the whole product in one picture: a customer writes at 01:15 — and by the time you wake up, they're in your calendar. Watch the loop.</p>
+    <div class="eyebrow">See it work</div>
+    <h2>Whenever they write, it answers.</h2>
+    <p>This is the whole product in one picture: a customer messages while you're busy — with a patient, mid-cut, asleep, it doesn't matter — and by the time you're free, they're already on your calendar.</p>
   </div>
   <div class="pipe-wrap">
     <!-- customer side -->
@@ -583,7 +591,7 @@ footer .legal a:hover{color:var(--amber)}
     </div>
     <!-- owner side -->
     <div class="pipe-panel reveal-r">
-      <div class="ph"><span>OWNER · TOMORROW'S CALENDAR</span><b>ASLEEP 😴</b></div>
+      <div class="ph"><span>OWNER · TOMORROW'S CALENDAR</span><b>OFF THE CLOCK 🙌</b></div>
       <div class="cal cal-rel">
         <div class="cal-title">Wednesday <span>Bright Smile Dental</span></div>
         <div class="slot filled"><span class="st">9:00</span><span class="sl">M. Weber — cleaning</span></div>
@@ -599,8 +607,8 @@ footer .legal a:hover{color:var(--amber)}
     </div>
   </div>
   <div class="pipe-stats reveal">
-    <div class="pst"><div class="v" id="stat-nights">0</div><div class="l">messages answered<br>while you slept</div></div>
-    <div class="pst"><div class="v">&lt;5s</div><div class="l">response time,<br>3 AM included</div></div>
+    <div class="pst"><div class="v" id="stat-nights">0</div><div class="l">messages answered<br>without lifting a finger</div></div>
+    <div class="pst"><div class="v">&lt;5s</div><div class="l">response time,<br>any hour</div></div>
     <div class="pst"><div class="v">0</div><div class="l">leads lost<br>to voicemail</div></div>
   </div>
 </section>
@@ -660,6 +668,7 @@ footer .legal a:hover{color:var(--amber)}
     <p>We handle everything technical. You keep running your business.</p>
   </div>
   <div class="steps">
+    <div class="steps-connector" aria-hidden="true"><i id="stepsDot"></i></div>
     <div class="step reveal">
       <div class="num">STEP 01 — AUDIT</div>
       <h3>We study your business</h3>
@@ -674,9 +683,34 @@ footer .legal a:hover{color:var(--amber)}
     </div>
     <div class="step reveal">
       <div class="num">STEP 03 — LAUNCH</div>
-      <h3>It starts working the night shift</h3>
-      <p>Every conversation is logged, every booking lands in your calendar, every lead in your inbox. You wake up to appointments, not missed messages.</p>
+      <h3>It starts working immediately</h3>
+      <p>Every conversation is logged, every booking lands in your calendar, every lead in your inbox — around your schedule, not around the clock.</p>
       <div class="bar"><i></i></div>
+    </div>
+  </div>
+</section>
+
+<section id="trust">
+  <div class="case reveal">
+    <div class="case-visual">
+      <div class="browser-bar"><i></i><i></i><i></i><span class="url">yourbusiness.com</span></div>
+      <div class="browser-body">
+        <div class="bb-hero"></div>
+        <div class="bb-hero2"></div>
+        <div class="bb-grid"><i></i><i></i><i></i></div>
+        <div class="bb-chatbubble">💬 Booked ✅</div>
+      </div>
+    </div>
+    <div class="case-text reveal-r">
+      <div class="eyebrow">Not off-the-shelf</div>
+      <h2>Every build starts with research, not a template.</h2>
+      <p>Before a single page is designed, we go through your actual services, prices and the questions your customers really ask. The layout, the tone, the assistant's knowledge — all chosen for your business specifically, not copy-pasted from the last client.</p>
+      <p>You're also not just buying a website. The free audit alone hands you a second, outside pair of eyes on your business — concrete suggestions you can use whether or not you ever become a customer.</p>
+      <div class="case-stats">
+        <div class="cs"><div class="v">0</div><div class="l">Templates used —<br>every build is bespoke</div></div>
+        <div class="cs"><div class="v">1:1</div><div class="l">Researched for your<br>business specifically</div></div>
+        <div class="cs"><div class="v">Free</div><div class="l">Strategic audit<br>included, no strings</div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -689,130 +723,69 @@ footer .legal a:hover{color:var(--amber)}
   </div>
   <div class="work-grid">
     <div class="work-card reveal" data-theme="dental">
-      <div class="work-scene sc-dental">
-        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="250" fill="#EFF8F8"/>
-          <rect y="196" width="400" height="54" fill="#DDEDED"/>
-          <rect x="26" y="30" width="96" height="70" rx="6" fill="#CFEAEF"/>
-          <rect x="26" y="30" width="96" height="70" rx="6" fill="none" stroke="#B5DADF" stroke-width="3"/>
-          <line x1="74" y1="30" x2="74" y2="100" stroke="#B5DADF" stroke-width="3"/>
-          <circle cx="52" cy="52" r="10" fill="#FFE9B8" opacity=".9"/>
-          <path d="M300 88 q0 -26 26 -26 h20 q6 0 6 8 v10 q0 8 -8 8 h-24 q-8 0 -10 10 z" fill="#9FB6BC"/>
-          <circle cx="352" cy="66" r="13" fill="#F5FBFC" stroke="#9FB6BC" stroke-width="3"/>
-          <circle cx="352" cy="66" r="5" fill="#FFE9B8"/>
-          <path d="M340 78 L310 150" stroke="#9FB6BC" stroke-width="5" stroke-linecap="round"/>
-          <path d="M120 160 q0 -18 18 -18 h84 q16 0 22 -16 q5 -14 18 -14 q12 0 12 14 v34 q0 14 -14 14 h-126 q-14 0 -14 -14 z" fill="#0B8F8F"/>
-          <path d="M126 156 q0 -10 12 -10 h80 q14 0 20 -14 q5 -11 14 -11 q8 0 8 10 v28 q0 9 -9 9 h-116 q-9 0 -9 -12 z" fill="#12A5A5"/>
-          <rect x="150" y="174" width="10" height="26" fill="#7FA6AC"/>
-          <rect x="230" y="174" width="10" height="26" fill="#7FA6AC"/>
-          <rect x="132" y="198" width="120" height="8" rx="4" fill="#7FA6AC"/>
-          <rect x="316" y="130" width="58" height="70" rx="5" fill="#fff" stroke="#CBE3E6" stroke-width="2"/>
-          <rect x="324" y="140" width="42" height="8" rx="3" fill="#D8ECEE"/>
-          <rect x="324" y="154" width="42" height="8" rx="3" fill="#D8ECEE"/>
-          <circle cx="345" cy="184" r="4" fill="#0B8F8F"/>
-          <path d="M52 200 q-4 -26 10 -30 q-12 -8 -2 -22 q10 6 10 18 q4 -16 16 -18 q6 16 -8 26 q12 2 10 26 z" fill="#3FAE9E"/>
-          <rect x="46" y="198" width="44" height="14" rx="4" fill="#C9E4E4"/>
-        </svg>
-        <span class="scene-label">Bright Smile Dental — demo</span>
-        <div class="wb-chat">
-            <div class="wb-msg c">My tooth hurts 😖 anything tomorrow?</div>
-            <div class="wb-msg a">Of course — 9:30 or 11:00?</div>
-            <div class="wb-msg c">9:30 please 🙏</div>
-            <div class="wb-msg a">Booked ✅ See you at 9:30, Anna!</div>
+      <a class="work-browser" href="concepts/dental.html" target="_blank" rel="noopener">
+        <div class="wb-bar">
+          <i></i><i></i><i></i>
+          <span>brightsmile-dental.com</span>
+          <span class="wb-tag">Concept site</span>
         </div>
-        <div class="ws-launcher lb-dental">💬</div>
-      </div>
+        <div class="wb-frame">
+          <iframe src="concepts/dental.html" tabindex="-1" scrolling="no" title="Bright Smile Dental concept site preview"></iframe>
+          <span class="wb-open">Open concept ↗</span>
+        </div>
+      </a>
       <div class="work-info">
         <div class="work-tags"><span>DENTAL CLINIC</span><span class="wt-amber">SITE + ASSISTANT + BOOKING</span></div>
         <h3>Bright Smile Dental</h3>
         <p>Knows every service and price, offers real slots, books patients while the front desk is with someone else.</p>
-        <button class="work-cta" data-persona="dental">Talk to this assistant →</button>
+        <div class="work-actions">
+          <a class="work-cta work-cta-ghost" href="concepts/dental.html" target="_blank" rel="noopener">View concept site ↗</a>
+          <button class="work-cta" data-persona="dental">Talk to this assistant →</button>
+        </div>
       </div>
     </div>
     <div class="work-card reveal" data-theme="barber">
-      <div class="work-scene sc-barber">
-        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="250" fill="#1A0C10"/>
-          <rect y="200" width="400" height="50" fill="#120709"/>
-          <rect x="140" y="26" width="120" height="86" rx="8" fill="#241318" stroke="#3A2026" stroke-width="3"/>
-          <rect x="150" y="36" width="100" height="66" rx="5" fill="#2E1A20"/>
-          <circle cx="152" cy="30" r="4" fill="#FFD9A0"/><circle cx="176" cy="26" r="4" fill="#FFD9A0"/>
-          <circle cx="200" cy="24" r="4" fill="#FFD9A0"/><circle cx="224" cy="26" r="4" fill="#FFD9A0"/>
-          <circle cx="248" cy="30" r="4" fill="#FFD9A0"/>
-          <rect x="130" y="116" width="140" height="10" rx="4" fill="#3A2026"/>
-          <g transform="translate(52,40)">
-            <rect x="-6" y="-10" width="32" height="14" rx="6" fill="#C9CDD6"/>
-            <rect x="0" y="0" width="20" height="72" rx="9" fill="#EDE6D8"/>
-            <g clip-path="url(#pol)"><g transform="rotate(-30 10 36)">
-              <rect x="-30" y="-6" width="80" height="9" fill="#E4573D"/><rect x="-30" y="12" width="80" height="9" fill="#2E4E7E"/>
-              <rect x="-30" y="30" width="80" height="9" fill="#E4573D"/><rect x="-30" y="48" width="80" height="9" fill="#2E4E7E"/>
-              <rect x="-30" y="66" width="80" height="9" fill="#E4573D"/></g></g>
-            <clipPath id="pol"><rect x="0" y="0" width="20" height="72" rx="9"/></clipPath>
-            <rect x="-6" y="68" width="32" height="14" rx="6" fill="#C9CDD6"/>
-          </g>
-          <path d="M168 152 q0 -12 12 -12 h44 q12 0 12 12 v18 h-68 z" fill="#7A2E22"/>
-          <path d="M162 138 q0 -10 10 -10 h4 v42 h-14 z" fill="#8F3A2B"/>
-          <path d="M228 138 q10 0 10 10 v32 h-14 v-42 z" fill="#8F3A2B"/>
-          <rect x="176" y="170" width="52" height="10" rx="4" fill="#5A2019"/>
-          <path d="M196 180 v16 M180 208 h36 M196 196 q-16 0 -18 12 M196 196 q16 0 18 12" stroke="#C9CDD6" stroke-width="7" stroke-linecap="round" fill="none"/>
-          <rect x="304" y="52" width="66" height="30" rx="6" fill="none" stroke="#E4573D" stroke-width="3" opacity=".9"/>
-          <text x="337" y="73" font-family="Archivo,sans-serif" font-size="15" font-weight="800" fill="#FF7B5E" text-anchor="middle" letter-spacing="2">FADE</text>
-          <ellipse cx="200" cy="238" rx="150" ry="16" fill="#E4573D" opacity=".08"/>
-        </svg>
-        <span class="scene-label">Fade District — demo</span>
-        <div class="wb-chat">
-            <div class="wb-msg c">You open Saturday? Need a fade 💈</div>
-            <div class="wb-msg a">We are — 12:00 or 16:30 free</div>
-            <div class="wb-msg c">16:30 🤙</div>
-            <div class="wb-msg a">Locked in ✅ See you Saturday!</div>
+      <a class="work-browser" href="concepts/barber.html" target="_blank" rel="noopener">
+        <div class="wb-bar">
+          <i></i><i></i><i></i>
+          <span>fadedistrict.com</span>
+          <span class="wb-tag">Concept site</span>
         </div>
-        <div class="ws-launcher lb-barber">💬</div>
-      </div>
+        <div class="wb-frame">
+          <iframe src="concepts/barber.html" tabindex="-1" scrolling="no" title="Fade District concept site preview"></iframe>
+          <span class="wb-open">Open concept ↗</span>
+        </div>
+      </a>
       <div class="work-info">
         <div class="work-tags"><span>BARBERSHOP</span><span class="wt-amber">SITE + ASSISTANT + BOOKING</span></div>
         <h3>Fade District</h3>
         <p>Catches the Saturday DM chaos, fills the chairs, answers in the shop&#39;s own voice.</p>
-        <button class="work-cta" data-persona="barber">Talk to this assistant →</button>
+        <div class="work-actions">
+          <a class="work-cta work-cta-ghost" href="concepts/barber.html" target="_blank" rel="noopener">View concept site ↗</a>
+          <button class="work-cta" data-persona="barber">Talk to this assistant →</button>
+        </div>
       </div>
     </div>
     <div class="work-card reveal" data-theme="auto">
-      <div class="work-scene sc-auto">
-        <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="250" fill="#171B21"/>
-          <rect y="204" width="400" height="46" fill="#10141A"/>
-          <path d="M200 6 L136 210 h128 z" fill="#FFB454" opacity=".07"/>
-          <rect x="188" y="0" width="24" height="12" rx="3" fill="#2A313B"/>
-          <rect x="196" y="12" width="8" height="10" fill="#2A313B"/>
-          <rect x="70" y="60" width="16" height="150" rx="4" fill="#2E3641"/>
-          <rect x="314" y="60" width="16" height="150" rx="4" fill="#2E3641"/>
-          <rect x="70" y="130" width="260" height="12" rx="4" fill="#39424F"/>
-          <path d="M124 128 q4 -30 34 -34 q16 -22 60 -22 q44 0 58 22 q30 4 34 34 z" fill="#4E7CFF" opacity=".85"/>
-          <path d="M168 96 q10 -14 44 -14 q34 0 44 14 q-22 5 -44 5 q-22 0 -44 -5 z" fill="#9FB6E8" opacity=".7"/>
-          <circle cx="158" cy="130" r="17" fill="#0C0F14" stroke="#5A6673" stroke-width="5"/>
-          <circle cx="244" cy="130" r="17" fill="#0C0F14" stroke="#5A6673" stroke-width="5"/>
-          <rect x="30" y="44" width="76" height="60" rx="5" fill="#20262E"/>
-          <circle cx="44" cy="56" r="2.5" fill="#4A545F"/><circle cx="60" cy="56" r="2.5" fill="#4A545F"/>
-          <circle cx="76" cy="56" r="2.5" fill="#4A545F"/><circle cx="92" cy="56" r="2.5" fill="#4A545F"/>
-          <rect x="40" y="66" width="7" height="26" rx="3" fill="#FFB454" opacity=".8"/>
-          <rect x="56" y="66" width="7" height="20" rx="3" fill="#8892A0"/>
-          <rect x="72" y="66" width="7" height="30" rx="3" fill="#8892A0"/>
-          <path d="M348 118 a16 16 0 1 0 14 24 l16 16 8 -8 -16 -16 a16 16 0 0 0 -22 -16 z" fill="#8892A0" opacity=".9" transform="rotate(24 360 140)"/>
-          <ellipse cx="200" cy="234" rx="160" ry="14" fill="#FFB454" opacity=".07"/>
-        </svg>
-        <span class="scene-label">Torque Auto Service — demo</span>
-        <div class="wb-chat">
-            <div class="wb-msg c">Car died 😬 can you take it Monday?</div>
-            <div class="wb-msg a">Yes — drop-off at 8:00 works?</div>
-            <div class="wb-msg c">Perfect. It&#39;s a Golf mk7</div>
-            <div class="wb-msg a">Noted ✅ Monday 8:00, we got you</div>
+      <a class="work-browser" href="concepts/auto.html" target="_blank" rel="noopener">
+        <div class="wb-bar">
+          <i></i><i></i><i></i>
+          <span>torqueauto.com</span>
+          <span class="wb-tag">Concept site</span>
         </div>
-        <div class="ws-launcher lb-auto">💬</div>
-      </div>
+        <div class="wb-frame">
+          <iframe src="concepts/auto.html" tabindex="-1" scrolling="no" title="Torque Auto Service concept site preview"></iframe>
+          <span class="wb-open">Open concept ↗</span>
+        </div>
+      </a>
       <div class="work-info">
         <div class="work-tags"><span>AUTO SERVICE</span><span class="wt-amber">SITE + ASSISTANT + BOOKING</span></div>
         <h3>Torque Auto Service</h3>
         <p>Turns "my car just died" panic messages into scheduled drop-offs with the car model already noted.</p>
-        <button class="work-cta" data-persona="auto">Talk to this assistant →</button>
+        <div class="work-actions">
+          <a class="work-cta work-cta-ghost" href="concepts/auto.html" target="_blank" rel="noopener">View concept site ↗</a>
+          <button class="work-cta" data-persona="auto">Talk to this assistant →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -930,7 +903,7 @@ footer .legal a:hover{color:var(--amber)}
 <section class="contact" id="contact">
   <div class="reveal">
     <div class="eyebrow" style="justify-content:center">Get started</div>
-    <h2>Stop losing the night shift.</h2>
+    <h2>Stop losing customers to silence.</h2>
     <p>Message us on WhatsApp — tell us what business you run, and we'll show you exactly what your assistant would say to your customers.</p>
     <div class="contact-btns">
       <a class="btn btn-wa" href="https://wa.me/490000000000" target="_blank" rel="noopener">
@@ -964,7 +937,7 @@ footer .legal a:hover{color:var(--amber)}
 </section>
 
 <footer>
-  <div>RENLO · websites that work the night shift</div>
+  <div>RENLO · websites with an AI front desk built in</div>
   <div class="legal">
     <a href="#" data-modal="impressum">Impressum</a>
     <a href="#" data-modal="datenschutz">Datenschutz</a>
@@ -1024,6 +997,53 @@ footer .legal a:hover{color:var(--amber)}
   <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.7.1.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.3 1.8Z"/></svg>
 </a>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+if(window.gsap && window.ScrollTrigger && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* steps connector: glowing dot travels across the 3 steps as you scroll (no pin — just follows natural scroll) */
+  const stepsDot=document.getElementById('stepsDot');
+  if(stepsDot){
+    const stepCards=gsap.utils.toArray('.step');
+    gsap.set(stepsDot,{left:'0%'});
+    gsap.to(stepsDot,{left:'100%',ease:'none',
+      scrollTrigger:{trigger:'.steps',start:'top 75%',end:'bottom 55%',scrub:.6}});
+    stepCards.forEach((card,i)=>{
+      gsap.to(card,{scale:1.035,boxShadow:'0 0 0 2px var(--amber),0 20px 50px rgba(255,180,84,.18)',duration:.4,ease:'power1.inOut',
+        scrollTrigger:{trigger:card,start:'top 65%',end:'bottom 45%',toggleActions:'play reverse play reverse'}});
+    });
+  }
+
+  /* benefit icons: pop in with a little overshoot as the grid scrolls into view */
+  const bIcons=document.querySelectorAll('.benefit .b-ic');
+  if(bIcons.length){
+    gsap.set(bIcons,{scale:0,rotate:-25,opacity:0});
+    gsap.to(bIcons,{scale:1,rotate:0,opacity:1,duration:.6,stagger:.09,ease:'back.out(2.2)',
+      scrollTrigger:{trigger:'.benefits',start:'top 82%'}});
+  }
+
+  /* hero phone: subtle depth parallax on scroll */
+  const phoneWrap=document.querySelector('.phone-wrap');
+  if(phoneWrap){
+    gsap.to(phoneWrap,{yPercent:-6,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+  }
+
+  /* trust browser-mockup: gentle tilt-in */
+  const caseVisual=document.querySelector('.case-visual');
+  if(caseVisual){
+    gsap.set(caseVisual,{rotateY:-8,rotateX:4,opacity:0,y:26,transformPerspective:900});
+    gsap.to(caseVisual,{rotateY:0,rotateX:0,opacity:1,y:0,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:caseVisual,start:'top 85%'}});
+  }
+
+  /* fonts + late layout shifts can leave ScrollTrigger's cached positions wrong — resync once things settle */
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>ScrollTrigger.refresh());}
+  addEventListener('load',()=>ScrollTrigger.refresh());
+  setTimeout(()=>ScrollTrigger.refresh(),1200);
+}
+</script>
 <script>
 /* ---------- APPLE EMOJI ENGINE ---------- */
 const EMOJI_RE=/(\p{Extended_Pictographic}(?:\uFE0F)?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F)?)*)/gu;
@@ -1206,8 +1226,29 @@ document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=
   });
 })();
 
+/* scale the live concept-site iframes to fit their card */
+(function(){
+  const BASE=1440;
+  function fit(frame){
+    const wrap=frame.closest('.wb-frame');
+    if(!wrap)return;
+    const w=wrap.clientWidth,h=wrap.clientHeight;
+    if(!w||!h)return;
+    const scale=w/BASE;
+    frame.style.height=(h/scale)+'px';
+    frame.style.transform='scale('+scale+')';
+  }
+  const frames=document.querySelectorAll('.wb-frame iframe');
+  frames.forEach(f=>{
+    f.addEventListener('load',()=>fit(f));
+    fit(f);
+  });
+  let t;
+  addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>frames.forEach(fit),120)});
+})();
+
 /* work cards -> switch live demo persona */
-document.querySelectorAll('.work-cta').forEach(b=>b.addEventListener('click',()=>{
+document.querySelectorAll('.work-cta[data-persona]').forEach(b=>b.addEventListener('click',()=>{
   const tab=document.querySelector('.tab[data-persona="'+b.dataset.persona+'"]');
   if(tab)tab.click();
   document.getElementById('demo').scrollIntoView({behavior:'smooth',block:'center'});
@@ -1228,7 +1269,7 @@ document.querySelectorAll('.work-cta').forEach(b=>b.addEventListener('click',()=
   });
 })();
 
-/* parallax orbs */
+/* parallax orbs + scroll-driven color play */
 (function(){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const orbs=document.querySelectorAll('.orb');
@@ -1238,9 +1279,25 @@ document.querySelectorAll('.work-cta').forEach(b=>b.addEventListener('click',()=
     requestAnimationFrame(()=>{
       const y=scrollY;
       orbs.forEach((o,i)=>{o.style.transform='translateY('+(y*(i?0.06:-0.05))+'px)';});
+      const h=document.documentElement;
+      const frac=y/(h.scrollHeight-h.clientHeight||1);
+      const hue=24+frac*190; // amber -> teal/blue across the page
+      document.documentElement.style.setProperty('--play-hue',hue.toFixed(0));
       ticking=false;
     });
   },{passive:true});
+})();
+
+/* hero cursor spotlight */
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches||!matchMedia('(hover:hover)').matches)return;
+  const hero=document.getElementById('top');
+  if(!hero)return;
+  hero.addEventListener('mousemove',e=>{
+    const r=hero.getBoundingClientRect();
+    document.getElementById('spotlight').style.setProperty('--sx',(e.clientX-r.left)+'px');
+    document.getElementById('spotlight').style.setProperty('--sy',(e.clientY-r.top)+'px');
+  });
 })();
 
 /* copy email to clipboard */
@@ -1302,7 +1359,8 @@ addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.m
     d.className='pmsg '+(item.who==='cust'?'cust':'ai');
     d.innerHTML=emojify(item.text)+'<span class="t">'+item.time+'</span>';
     chat.appendChild(d);
-    requestAnimationFrame(()=>requestAnimationFrame(()=>d.classList.add('show')));
+    chat.scrollTop=chat.scrollHeight;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{d.classList.add('show');chat.scrollTop=chat.scrollHeight;}));
   }
 
   function resetLoop(){
