@@ -24,8 +24,8 @@
   --font-m:'IBM Plex Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height:1.6;overflow-x:hidden}
+html{scroll-behavior:smooth;overflow-x:hidden;width:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height:1.6;overflow-x:hidden;width:100%}
 ::selection{background:var(--amber);color:#0A0A0A}
 
 #sky{position:fixed;inset:0;z-index:0;pointer-events:none}
@@ -467,18 +467,15 @@ footer .legal a:hover{color:var(--amber)}
 @media(max-width:980px){
   .hero{grid-template-columns:1fr;padding-top:110px}
   .phone{margin:0 auto}
-  .steps,.plans{grid-template-columns:1fr}
+  .cards,.steps,.plans,.benefits{grid-template-columns:1fr}
   .case{grid-template-columns:1fr}
   .nav-links a:not(.btn){display:none}
   /* heavy blur is expensive to repaint on mobile GPUs — cut it down, background opacity already carries the look */
   nav{backdrop-filter:blur(4px);background:rgba(7,10,18,.92)}
   .phone{backdrop-filter:blur(8px)}
   .chat-head,.tabs{backdrop-filter:none}
-  /* problem cards + benefits: horizontal swipe instead of a long vertical stack */
-  .cards,.benefits{display:flex;grid-template-columns:none;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -20px;padding:4px 20px 14px}
-  .cards::-webkit-scrollbar,.benefits::-webkit-scrollbar{display:none}
-  .cards>*,.benefits>*{flex:0 0 82%;scroll-snap-align:start}
+  /* too much scrolling on mobile — show only the 3 strongest benefit cards instead of all 6 */
+  .benefit:nth-child(3),.benefit:nth-child(4),.benefit:nth-child(5){display:none}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -745,7 +742,7 @@ footer .legal a:hover{color:var(--amber)}
           <span class="wb-tag">Concept site</span>
         </div>
         <div class="wb-frame">
-          <iframe src="dental.html" tabindex="-1" scrolling="no" title="Bright Smile Dental concept site preview"></iframe>
+          <iframe src="dental.html" loading="lazy" tabindex="-1" scrolling="no" title="Bright Smile Dental concept site preview"></iframe>
           <span class="wb-open">Open concept ↗</span>
         </div>
       </a>
@@ -767,7 +764,7 @@ footer .legal a:hover{color:var(--amber)}
           <span class="wb-tag">Concept site</span>
         </div>
         <div class="wb-frame">
-          <iframe src="barber.html" tabindex="-1" scrolling="no" title="Fade District concept site preview"></iframe>
+          <iframe src="barber.html" loading="lazy" tabindex="-1" scrolling="no" title="Fade District concept site preview"></iframe>
           <span class="wb-open">Open concept ↗</span>
         </div>
       </a>
@@ -789,7 +786,7 @@ footer .legal a:hover{color:var(--amber)}
           <span class="wb-tag">Concept site</span>
         </div>
         <div class="wb-frame">
-          <iframe src="auto.html" tabindex="-1" scrolling="no" title="Torque Auto Service concept site preview"></iframe>
+          <iframe src="auto.html" loading="lazy" tabindex="-1" scrolling="no" title="Torque Auto Service concept site preview"></iframe>
           <span class="wb-open">Open concept ↗</span>
         </div>
       </a>
