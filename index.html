@@ -476,6 +476,13 @@ footer .legal a:hover{color:var(--amber)}
   .chat-head,.tabs{backdrop-filter:none}
   /* too much scrolling on mobile — show only the 3 strongest benefit cards instead of all 6 */
   .benefit:nth-child(3),.benefit:nth-child(4),.benefit:nth-child(5){display:none}
+  /* one lost-lead example is plenty on a phone */
+  .cards .card:nth-child(2){display:none}
+  .cards{grid-template-columns:1fr;max-width:460px}
+  /* desktop section padding (110px) reads as a giant empty hole on a short mobile screen — cut it way down */
+  section{padding:56px clamp(20px,5vw,64px)}
+  .sec-head{margin-bottom:34px}
+  .founder-strip{margin-top:24px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
