@@ -221,7 +221,7 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .cal-rel{position:relative;height:360px}
 
 /* cards */
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:900px;margin:0 auto}
 .card{background:var(--raise);border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px;position:relative;overflow:hidden;
   transition:transform .3s ease,border-color .3s ease}
 .card:hover{transform:translateY(-6px);border-color:rgba(255,180,84,.35)}
@@ -532,7 +532,7 @@ footer .legal a:hover{color:var(--amber)}
   <div class="hero-left">
     <div class="clockline">RIGHT NOW <b id="clock">03:12</b> · A CUSTOMER IS MESSAGING A BUSINESS THAT CAN'T ANSWER</div>
     <h1>Someone should always answer.<br><span class="accent">Now, someone does.</span></h1>
-    <p class="hero-sub">We build websites with an AI receptionist that replies in seconds, books real appointments and captures every lead — while you're with a customer, off for the day, or asleep. You focus on the work; it handles the front desk.</p>
+    <p class="hero-sub">An AI receptionist built into your website — replies in seconds, books real appointments, captures every lead. While you're with a customer, off for the day, or asleep.</p>
     <div class="hero-cta">
       <a class="btn btn-wa" href="https://wa.me/490000000000" target="_blank" rel="noopener">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.7.1.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.3 1.8Z"/></svg>
@@ -628,27 +628,21 @@ footer .legal a:hover{color:var(--amber)}
 <section id="problem">
   <div class="sec-head reveal">
     <div class="eyebrow">The problem</div>
-    <h2>Every unanswered message is a customer choosing your competitor.</h2>
-    <p>People message businesses when it's convenient for <em>them</em> — evenings, weekends, lunch breaks. If nobody replies within minutes, they simply message the next place on the list.</p>
+    <h2>Every unanswered message is a sale for your competitor.</h2>
+    <p>People message when it's convenient for <em>them</em>. No reply in minutes, and they've already messaged the next place.</p>
   </div>
   <div class="cards">
     <div class="card lost reveal">
       <div class="time">FRI · 21:40 <span class="lost-tag">LEAD LOST</span></div>
       <div class="lost-msg">"Hi! I'd like a consultation about an implant — do you have anything next week?"</div>
       <div class="lost-status">seen Monday 08:57 — 59 hours later</div>
-      <p>An implant consultation — one of the most valuable patients a clinic ever gets. She booked with another clinic that same evening. High-value patients rarely message twice.</p>
+      <p>One of the most valuable patients a clinic gets. She booked elsewhere that same evening.</p>
     </div>
     <div class="card lost reveal">
       <div class="time">SAT · 14:05 <span class="lost-tag">LEAD LOST</span></div>
       <div class="lost-msg">"My car just died, can you take it Monday morning? It's kind of urgent 😬"</div>
       <div class="lost-status">seen Saturday 19:30 — after closing</div>
-      <p>An urgent repair is the easiest sale there is — the customer has already decided to pay. By 15:00 his car was at the shop across town. All they did was answer first.</p>
-    </div>
-    <div class="card lost reveal">
-      <div class="time">SUN · 09:20 <span class="lost-tag">LEAD LOST</span></div>
-      <div class="lost-msg">"We're a bridal party of five, looking for hair &amp; makeup for June 14. Are you available?"</div>
-      <div class="lost-status">seen Monday 10:12 — 25 hours later</div>
-      <p>Five clients, one booking, premium pricing — the kind of order that makes a salon's month. Wedding planners message a shortlist and go with whoever replies first.</p>
+      <p>The easiest sale there is — he'd already decided to pay. By 15:00 his car was at the shop across town.</p>
     </div>
   </div>
 </section>
@@ -815,7 +809,7 @@ footer .legal a:hover{color:var(--amber)}
     <div class="audit-left reveal-l">
       <div class="eyebrow">Free website audit</div>
       <h2>Your business shouldn't look <em>cheaper</em> than the service you provide.</h2>
-      <p>Request a free audit — we'll personally review your current site (or its absence) and send you 3–5 specific things that may be costing you trust, enquiries or bookings. In writing, no call needed.</p>
+      <p>We'll personally review your current site (or its absence) and send you 3–5 specific things costing you trust or bookings — in writing, no call needed.</p>
     </div>
     <div class="audit-form reveal-r">
       <div id="af-fields">
@@ -1261,13 +1255,21 @@ document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=
   addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>frames.forEach(fit),120)});
 })();
 
-/* work cards -> switch live demo persona */
-document.querySelectorAll('.work-cta[data-persona]').forEach(b=>b.addEventListener('click',()=>{
-  const tab=document.querySelector('.tab[data-persona="'+b.dataset.persona+'"]');
-  if(tab)tab.click();
-  document.getElementById('demo').scrollIntoView({behavior:'smooth',block:'center'});
-  setTimeout(()=>document.getElementById('chat-input').focus({preventScroll:true}),900);
-}));
+/* work cards -> switch live demo persona
+   (guarded against mobile's "ghost click" — a tap-turned-scroll can still fire a synthetic
+   click on whatever the finger touched down on, which was throwing people back up to the hero) */
+(function(){
+  let touchMoved=false;
+  document.addEventListener('touchstart',()=>{touchMoved=false;},{passive:true});
+  document.addEventListener('touchmove',()=>{touchMoved=true;},{passive:true});
+  document.querySelectorAll('.work-cta[data-persona]').forEach(b=>b.addEventListener('click',(e)=>{
+    if(touchMoved)return;
+    const tab=document.querySelector('.tab[data-persona="'+b.dataset.persona+'"]');
+    if(tab)tab.click();
+    document.getElementById('demo').scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>document.getElementById('chat-input').focus({preventScroll:true}),900);
+  }));
+})();
 
 
 /* 3D tilt on work cards */
