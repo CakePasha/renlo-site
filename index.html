@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+/* runs before first paint so there's no flash of the wrong theme */
+(function(){
+  try{
+    var saved=localStorage.getItem('renlo-theme');
+    var theme=saved||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');
+    if(theme==='light')document.documentElement.setAttribute('data-theme','light');
+  }catch(e){}
+})();
+</script>
 <title>RENLO — Premium websites with a smart AI assistant built in</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,6 +32,36 @@
   --font-d:'Archivo',sans-serif;
   --font-b:'Inter',sans-serif;
   --font-m:'IBM Plex Mono',monospace;
+  --nav-bg:rgba(7,10,18,.72);
+  --nav-bg-strong:rgba(7,10,18,.92);
+  --input-bg:rgba(7,10,18,.5);
+  --input-border:rgba(255,255,255,.16);
+  --placeholder-text:rgba(233,237,245,.4);
+  --faint:rgba(233,237,245,.05);
+}
+[data-theme="light"]{
+  --bg:#F7F5F0;
+  --raise:#FFFFFF;
+  --raise-2:#F0ECE3;
+  --ink:#15171F;
+  --muted:#5C6275;
+  --amber:#BD5F10;
+  --amber-soft:rgba(189,95,16,.16);
+  --line:rgba(21,23,31,.11);
+  --nav-bg:rgba(247,245,240,.78);
+  --nav-bg-strong:rgba(247,245,240,.92);
+  --input-bg:rgba(21,23,31,.04);
+  --input-border:rgba(21,23,31,.14);
+  --placeholder-text:rgba(21,23,31,.38);
+  --faint:rgba(21,23,31,.05);
+}
+/* the hero chat demo + night pipeline demo are meant to look like a screenshot of a
+   dark chat UI — they keep the dark palette regardless of page theme so the
+   frosted-glass effect never breaks on a light background */
+.phone-wrap,.pipe-wrap{
+  --bg:#070A12;--raise:#0C1120;--raise-2:#111830;--ink:#E9EDF5;--muted:#94A0B8;
+  --line:rgba(233,237,245,.09);--amber-soft:rgba(255,180,84,.14);--amber:#FFB454;
+  color:var(--ink);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden;width:100%}
@@ -29,6 +69,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height
 ::selection{background:var(--amber);color:#0A0A0A}
 
 #sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+[data-theme="light"] #sky{display:none}
 .content{position:relative;z-index:1}
 .orb{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
 .orb-1{width:520px;height:520px;background:rgba(255,180,84,.10);top:-120px;right:-100px}
@@ -46,7 +87,7 @@ h1,h2,h3{font-family:var(--font-d);letter-spacing:-.02em;line-height:1.05}
 .muted{color:var(--muted)}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
-  padding:18px clamp(20px,5vw,64px);backdrop-filter:blur(14px);background:rgba(7,10,18,.72);border-bottom:1px solid var(--line)}
+  padding:18px clamp(20px,5vw,64px);backdrop-filter:blur(14px);background:var(--nav-bg);border-bottom:1px solid var(--line)}
 .logo{font-family:var(--font-d);font-weight:900;font-size:19px;letter-spacing:.02em;display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
 .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 14px var(--amber);animation:pulse 2.6s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
@@ -54,6 +95,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:
 .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
 .nav-links a:hover,.nav-links a:focus-visible{color:var(--ink)}
 .nav-links a.btn-amber,.nav-links a.btn-amber:hover{color:#000}
+.theme-toggle{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);
+  display:grid;place-items:center;cursor:pointer;transition:all .2s;flex-shrink:0;padding:0}
+.theme-toggle:hover{border-color:var(--amber);color:var(--amber)}
+.theme-toggle:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.theme-toggle svg{width:17px;height:17px}
+.theme-toggle .ti-sun{display:none}
+[data-theme="light"] .theme-toggle .ti-sun{display:block}
+[data-theme="light"] .theme-toggle .ti-moon{display:none}
 .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-d);font-weight:700;font-size:14px;
   padding:12px 22px;border-radius:100px;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease;cursor:pointer;border:none;position:relative;overflow:hidden}
 .btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
@@ -85,10 +134,12 @@ h1 .w{display:inline-block;opacity:0;transform:translateY(.55em);animation:wordU
 @keyframes wordUp{to{opacity:1;transform:none}}
 h1 .accent{position:relative;
   background:linear-gradient(90deg,#FFB454 0%,#FFE3B8 45%,#FFB454 90%);background-size:220% 100%;
+  /* the light-cream midpoint above is tuned for a dark backdrop and nearly disappears on a light page */
   -webkit-background-clip:text;background-clip:text;color:transparent}
 h1 .accent.w{animation:wordUp .65s cubic-bezier(.2,.7,.2,1) forwards,shine 5.5s 1.2s linear infinite}
 @keyframes shine{to{background-position:-220% 0}}
 h1 .accent::after{content:"";position:absolute;left:0;bottom:6px;height:10px;width:100%;background:var(--amber-soft);z-index:-1;border-radius:4px}
+[data-theme="light"] h1 .accent{background-image:linear-gradient(90deg,#BD5F10 0%,#D9782E 45%,#BD5F10 90%)}
 .hero-sub{font-size:18px;color:var(--muted);max-width:520px;margin-bottom:36px}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px}
 .hero-note{font-family:var(--font-m);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
@@ -110,6 +161,7 @@ h1 .accent::after{content:"";position:absolute;left:0;bottom:6px;height:10px;wid
 @keyframes ringSpin{to{--ang:360deg}}
 .phone{position:relative;z-index:1;
   background:linear-gradient(155deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.05) 45%,rgba(255,255,255,.09) 100%);
+  background-color:rgba(10,14,26,.94);
   backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);
   border:1px solid rgba(255,255,255,.24);border-radius:26px;
   box-shadow:0 40px 90px rgba(0,0,0,.5),0 0 90px rgba(255,180,84,.14),inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(255,255,255,.06);overflow:hidden;
@@ -332,6 +384,11 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
   background:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.16);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
   font-size:14.5px;color:var(--muted);flex-wrap:wrap}
+/* the frosted-glass look above only reads correctly against a dark page background —
+   on the light theme it washes out, so swap it for a plain card */
+[data-theme="light"] .founder-strip{background:var(--raise);border:1px solid var(--line);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
+[data-theme="light"] .audit-form{background:var(--raise);border:1px solid var(--line);backdrop-filter:none;-webkit-backdrop-filter:none;
+  box-shadow:0 30px 70px rgba(0,0,0,.08)}
 .founder-strip b{color:var(--ink);font-family:var(--font-d)}
 .fs-diamond{color:var(--amber);font-size:15px;animation:pulse 2.4s infinite}
 .fs-link{margin-left:auto;color:var(--amber);text-decoration:none;font-family:var(--font-d);font-weight:700;font-size:14px;white-space:nowrap}
@@ -356,10 +413,10 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
   box-shadow:0 30px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.25)}
 .af-field{margin-bottom:18px}
 .af-field label{display:block;font-family:var(--font-m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.af-field input,.af-field textarea{width:100%;background:rgba(7,10,18,.5);border:1px solid rgba(255,255,255,.16);border-radius:12px;
+.af-field input,.af-field textarea{width:100%;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;
   padding:13px 16px;color:var(--ink);font-family:var(--font-b);font-size:14px;outline:none;transition:border-color .2s;resize:none}
 .af-field input:focus,.af-field textarea:focus{border-color:var(--amber)}
-.af-field ::placeholder{color:rgba(233,237,245,.4)}
+.af-field ::placeholder{color:var(--placeholder-text)}
 .audit-form .btn{width:100%;justify-content:center;font-size:15px;padding:15px}
 .af-note{text-align:center;font-family:var(--font-m);font-size:11px;color:var(--muted);margin-top:14px}
 .af-done{display:none;text-align:center;padding:30px 10px}
@@ -475,7 +532,7 @@ footer .legal a:hover{color:var(--amber)}
   .case{grid-template-columns:1fr}
   .nav-links a:not(.btn){display:none}
   /* heavy blur is expensive to repaint on mobile GPUs — cut it down, background opacity already carries the look */
-  nav{backdrop-filter:blur(4px);background:rgba(7,10,18,.92)}
+  nav{backdrop-filter:blur(4px);background:var(--nav-bg-strong)}
   .phone{backdrop-filter:blur(8px)}
   .chat-head,.tabs{backdrop-filter:none}
   /* too much scrolling on mobile — show only the 3 strongest benefit cards instead of all 6 */
@@ -506,7 +563,7 @@ footer .legal a:hover{color:var(--amber)}
 .bb-hero{height:14px;width:65%;background:var(--line);border-radius:6px;margin-bottom:10px}
 .bb-hero2{height:14px;width:45%;background:var(--line);border-radius:6px;margin-bottom:24px}
 .bb-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px}
-.bb-grid i{height:64px;border-radius:8px;background:rgba(233,237,245,.05);border:1px solid var(--line)}
+.bb-grid i{height:64px;border-radius:8px;background:var(--faint);border:1px solid var(--line)}
 .bb-chatbubble{margin-left:auto;width:fit-content;display:flex;align-items:center;gap:10px;background:var(--amber);color:#161000;
   padding:10px 16px;border-radius:100px;font-size:13px;font-weight:600;font-family:var(--font-d);box-shadow:0 8px 26px rgba(255,180,84,.4);animation:bob 3s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -527,6 +584,10 @@ footer .legal a:hover{color:var(--amber)}
 <nav>
   <a class="logo" href="#top"><span class="dot"></span>RENLO</a>
   <div class="nav-links">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light/dark theme">
+      <svg class="ti-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      <svg class="ti-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
     <a href="#night">Example</a>
     <a href="#audit">Free audit</a>
     <a href="#why">Why</a>
@@ -1563,6 +1624,27 @@ send.addEventListener('click',sendMsg);
 input.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg();});
 
 resetChat();
+</script>
+<script>
+/* ---------- theme toggle ---------- */
+(function(){
+  var btn=document.getElementById('theme-toggle');
+  var mq=matchMedia('(prefers-color-scheme: light)');
+  function apply(theme){
+    if(theme==='light')document.documentElement.setAttribute('data-theme','light');
+    else document.documentElement.removeAttribute('data-theme');
+  }
+  btn.addEventListener('click',function(){
+    var next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+    apply(next);
+    try{localStorage.setItem('renlo-theme',next);}catch(e){}
+  });
+  /* if the user never manually chose a theme here, keep following the OS setting live */
+  mq.addEventListener('change',function(e){
+    var saved;try{saved=localStorage.getItem('renlo-theme');}catch(err){}
+    if(!saved)apply(e.matches?'light':'dark');
+  });
+})();
 </script>
 </body>
 </html>
