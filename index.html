@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RENLO — Websites with an AI receptionist that never sleeps</title>
+<title>RENLO — Premium websites with a smart AI assistant built in</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070A12'/%3E%3Ctext x='50' y='69' font-family='Arial,Helvetica,sans-serif' font-weight='900' font-size='58' fill='%23FFB454' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -299,7 +299,9 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .work-tags span{font-family:var(--font-m);font-size:9.5px;letter-spacing:.12em;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:100px}
 .work-tags .wt-amber{color:var(--amber);border-color:rgba(255,180,84,.35)}
 .work-info h3{font-size:20px;margin-bottom:8px}
-.work-info p{font-size:14px;color:var(--muted);margin-bottom:20px;flex:1}
+.work-info p{font-size:14px;color:var(--muted);margin-bottom:14px;flex:1}
+.work-fit{font-family:var(--font-m);font-size:11.5px;letter-spacing:.01em;color:var(--muted);margin-bottom:18px;padding-top:14px;border-top:1px dashed var(--line)}
+.work-fit b{color:var(--amber);font-weight:600}
 .work-actions{display:flex;gap:10px;flex-wrap:wrap}
 .work-cta{font-family:var(--font-d);font-weight:700;font-size:13.5px;padding:13px;border-radius:100px;cursor:pointer;
   background:transparent;color:var(--amber);border:1px solid rgba(255,180,84,.4);transition:all .25s;
@@ -395,7 +397,9 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .plan .p-name{font-family:var(--font-m);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 .plan .p-price{font-family:var(--font-d);font-weight:800;font-size:40px;margin-bottom:6px}
 .plan .p-price small{font-size:15px;color:var(--muted);font-weight:500}
-.plan .p-desc{font-size:14px;color:var(--muted);margin-bottom:26px}
+.plan .p-desc{font-size:14px;color:var(--muted);margin-bottom:14px}
+.plan .p-fit{font-family:var(--font-m);font-size:11px;letter-spacing:.01em;color:var(--muted);margin-bottom:22px}
+.plan .p-fit b{color:var(--amber);font-weight:600}
 .plan ul{list-style:none;margin-bottom:32px;flex:1}
 .plan li{font-size:14.5px;padding:9px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}
 .plan li::before{content:"✓";color:var(--amber);font-weight:700;flex-shrink:0}
@@ -539,7 +543,7 @@ footer .legal a:hover{color:var(--amber)}
   <div class="hero-left">
     <div class="clockline">RIGHT NOW <b id="clock">03:12</b> · A CUSTOMER IS MESSAGING A BUSINESS THAT CAN'T ANSWER</div>
     <h1>Someone should always answer.<br><span class="accent">Now, someone does.</span></h1>
-    <p class="hero-sub">An AI receptionist built into your website — replies in seconds, books real appointments, captures every lead. While you're with a customer, off for the day, or asleep.</p>
+    <p class="hero-sub">A smart AI assistant built into your website — replies in seconds, answers real questions, and books appointments when your business needs it. While you're with a customer, off for the day, or asleep.</p>
     <div class="hero-cta">
       <a class="btn btn-wa" href="https://wa.me/490000000000" target="_blank" rel="noopener">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.4.6c-.2.2-.3.4-.1.7.1.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.3 1.8Z"/></svg>
@@ -555,14 +559,14 @@ footer .legal a:hover{color:var(--amber)}
   <div class="phone" id="demo">
     <div class="live-strip"><i></i>LIVE DEMO — TALK TO IT</div>
     <div class="tabs" role="tablist" aria-label="Demo industry">
-      <button class="tab active" data-persona="dental" role="tab">🦷 Bright Smile</button>
+      <button class="tab active" data-persona="roastery" role="tab">☕ Ember Roasting</button>
       <button class="tab" data-persona="barber" role="tab">💈 Fade District</button>
       <button class="tab" data-persona="auto" role="tab">🔧 Torque Auto</button>
     </div>
     <div class="chat-head">
-      <div class="avatar" id="chat-avatar">🦷</div>
+      <div class="avatar" id="chat-avatar">☕</div>
       <div>
-        <div class="name" id="chat-name">Bright Smile Dental — Assistant</div>
+        <div class="name" id="chat-name">Ember Roasting Co. — Assistant</div>
         <div class="status">Online · replies in seconds</div>
       </div>
     </div>
@@ -612,12 +616,12 @@ footer .legal a:hover{color:var(--amber)}
     <div class="pipe-panel reveal-r">
       <div class="ph"><span>OWNER · TOMORROW'S CALENDAR</span><b>OFF THE CLOCK 🙌</b></div>
       <div class="cal cal-rel">
-        <div class="cal-title">Wednesday <span>Bright Smile Dental</span></div>
-        <div class="slot filled"><span class="st">9:00</span><span class="sl">M. Weber — cleaning</span></div>
+        <div class="cal-title">Wednesday <span>Torque Auto Service</span></div>
+        <div class="slot filled"><span class="st">9:00</span><span class="sl">M. Weber — oil change</span></div>
         <div class="slot" id="slot-930"><span class="st">9:30</span><span class="sl">available</span></div>
-        <div class="slot filled"><span class="st">10:00</span><span class="sl">J. Fischer — check-up</span></div>
+        <div class="slot filled"><span class="st">10:00</span><span class="sl">J. Fischer — brake check</span></div>
         <div class="slot" id="slot-1100"><span class="st">11:00</span><span class="sl">available</span></div>
-        <div class="slot filled"><span class="st">11:30</span><span class="sl">T. Braun — filling</span></div>
+        <div class="slot filled"><span class="st">11:30</span><span class="sl">T. Braun — diagnostics</span></div>
         <div class="toast" id="pipe-toast">
           <div class="ic">✅</div>
           <div><b>New booking — Anna K., 9:30</b><small>captured at 01:17 · lead saved to CRM</small></div>
@@ -670,7 +674,7 @@ footer .legal a:hover{color:var(--amber)}
     <div class="benefit reveal"><span class="b-ic">💼</span><h3>You look bigger than you are</h3><p>Instant, polished replies read like an established company — even if it's just you and a chair.</p></div>
     <div class="benefit reveal"><span class="b-ic">🌍</span><h3>Every language, automatically</h3><p>Tourists, expats, locals — it replies in whatever language they write. No translator needed.</p></div>
     <div class="benefit reveal"><span class="b-ic">📥</span><h3>Nothing slips through</h3><p>Every chat logged, every contact captured. No more "I forgot to reply."</p></div>
-    <div class="benefit reveal"><span class="b-ic">💶</span><h3>A receptionist, minus the salary</h3><p>Answers, qualifies and books like front-desk staff — for less than a day's wage a month.</p></div>
+    <div class="benefit reveal"><span class="b-ic">💶</span><h3>An assistant, minus the salary</h3><p>Answers, qualifies, and books when your business actually needs it — for less than a day's wage a month.</p></div>
   </div>
 </section>
 
@@ -691,7 +695,7 @@ footer .legal a:hover{color:var(--amber)}
     <div class="step reveal">
       <div class="num">STEP 02 — BUILD</div>
       <h3>Website + AI assistant</h3>
-      <p>A fast, modern site with your AI receptionist built in — connected to your real calendar, trained to answer, qualify and book in your tone of voice.</p>
+      <p>A fast, modern site with a smart AI assistant built in — trained to answer and qualify in your tone of voice, connected to your real calendar when booking is part of the job.</p>
       <div class="bar"><i></i></div>
     </div>
     <div class="step reveal">
@@ -735,25 +739,26 @@ footer .legal a:hover{color:var(--amber)}
     <p>Three demo builds, three industries — and every assistant below is real. Press the button on any card and have a conversation with it yourself.</p>
   </div>
   <div class="work-grid">
-    <div class="work-card reveal" data-theme="dental">
-      <a class="work-browser" href="dental.html" target="_blank" rel="noopener">
+    <div class="work-card reveal" data-theme="roastery">
+      <a class="work-browser" href="roastery.html" target="_blank" rel="noopener">
         <div class="wb-bar">
           <i></i><i></i><i></i>
-          <span>brightsmile-dental.com</span>
+          <span>emberroasting.com</span>
           <span class="wb-tag">Concept site</span>
         </div>
         <div class="wb-frame">
-          <iframe src="dental.html" loading="lazy" tabindex="-1" scrolling="no" title="Bright Smile Dental concept site preview"></iframe>
+          <iframe src="roastery.html" loading="lazy" tabindex="-1" scrolling="no" title="Ember Roasting Co. concept site preview"></iframe>
           <span class="wb-open">Open concept ↗</span>
         </div>
       </a>
       <div class="work-info">
-        <div class="work-tags"><span>DENTAL CLINIC</span><span class="wt-amber">SITE + ASSISTANT + BOOKING</span></div>
-        <h3>Bright Smile Dental</h3>
-        <p>Knows every service and price, offers real slots, books patients while the front desk is with someone else.</p>
+        <div class="work-tags"><span>COFFEE ROASTERY</span><span class="wt-amber">SITE + SMART ASSISTANT</span></div>
+        <h3>Ember Roasting Co.</h3>
+        <p>Knows the full menu, today's roast and every origin — answers instantly, no booking required.</p>
+        <div class="work-fit">Best fit for: <b>cafés, boutiques, studios</b> — anywhere people ask before they buy.</div>
         <div class="work-actions">
-          <a class="work-cta work-cta-ghost" href="dental.html" target="_blank" rel="noopener">View concept site ↗</a>
-          <button class="work-cta" data-persona="dental">Talk to this assistant →</button>
+          <a class="work-cta work-cta-ghost" href="roastery.html" target="_blank" rel="noopener">View concept site ↗</a>
+          <button class="work-cta" data-persona="roastery">Talk to this assistant →</button>
         </div>
       </div>
     </div>
@@ -773,6 +778,7 @@ footer .legal a:hover{color:var(--amber)}
         <div class="work-tags"><span>BARBERSHOP</span><span class="wt-amber">SITE + ASSISTANT + BOOKING</span></div>
         <h3>Fade District</h3>
         <p>Catches the Saturday DM chaos, fills the chairs, answers in the shop&#39;s own voice.</p>
+        <div class="work-fit">Best fit for: <b>appointment-based businesses</b> — salons, spas, clinics, anyone juggling a schedule.</div>
         <div class="work-actions">
           <a class="work-cta work-cta-ghost" href="barber.html" target="_blank" rel="noopener">View concept site ↗</a>
           <button class="work-cta" data-persona="barber">Talk to this assistant →</button>
@@ -795,6 +801,7 @@ footer .legal a:hover{color:var(--amber)}
         <div class="work-tags"><span>AUTO SERVICE</span><span class="wt-amber">SITE + ASSISTANT + BOOKING</span></div>
         <h3>Torque Auto Service</h3>
         <p>Turns "my car just died" panic messages into scheduled drop-offs with the car model already noted.</p>
+        <div class="work-fit">Best fit for: <b>service businesses</b> juggling drop-offs, estimates and repeat customers.</div>
         <div class="work-actions">
           <a class="work-cta work-cta-ghost" href="auto.html" target="_blank" rel="noopener">View concept site ↗</a>
           <button class="work-cta" data-persona="auto">Talk to this assistant →</button>
@@ -848,6 +855,7 @@ footer .legal a:hover{color:var(--amber)}
       <div class="p-name">Starter</div>
       <div class="p-price">$399<small> build · then $29/mo</small></div>
       <div class="p-desc">For businesses that need a modern web presence that answers for itself.</div>
+      <div class="p-fit">Best fit for: <b>studios, boutiques, cafés</b> — a great answer matters more than a calendar slot.</div>
       <ul>
         <li>Custom one-page website</li>
         <li>AI assistant trained on your business</li>
@@ -861,6 +869,7 @@ footer .legal a:hover{color:var(--amber)}
       <div class="p-name">Growth</div>
       <div class="p-price">$599<small> build · then $59/mo</small></div>
       <div class="p-desc">The full night shift: your assistant doesn't just answer — it books.</div>
+      <div class="p-fit">Best fit for: <b>appointment-based businesses</b> — salons, clinics, repair shops, anyone juggling a schedule.</div>
       <ul>
         <li>Everything in Starter</li>
         <li>Multi-page website</li>
@@ -875,6 +884,7 @@ footer .legal a:hover{color:var(--amber)}
       <div class="p-name">Scale</div>
       <div class="p-price">$799<small> build · then $89/mo</small></div>
       <div class="p-desc">For businesses ready to automate beyond the front desk.</div>
+      <div class="p-fit">Best fit for: <b>multi-location or high-volume businesses</b> ready to automate follow-ups too.</div>
       <ul>
         <li>Everything in Growth</li>
         <li>CRM workflows &amp; follow-up sequences</li>
@@ -1369,12 +1379,12 @@ addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.m
   let answered=0;
 
   const script=[
-    {who:'cust',text:"Hi, my tooth's been killing me since yesterday 😖 do you have anything tomorrow morning?",time:'01:15'},
-    {who:'ai',text:"So sorry to hear that! Yes — tomorrow we have 9:30 or 11:00 free. Which works better for you?",time:'01:15'},
+    {who:'cust',text:"Hi, my car's making a grinding noise since yesterday 😖 do you have anything tomorrow morning?",time:'01:15'},
+    {who:'ai',text:"Sorry to hear that! Yes — tomorrow we have 9:30 or 11:00 free. Which works better for you?",time:'01:15'},
     {who:'cust',text:"9:30 please 🙏",time:'01:16'},
     {who:'ai',text:"Done — may I have your name and phone number to confirm the booking?",time:'01:16'},
     {who:'cust',text:"Anna K., +49 •••• ••• 214",time:'01:17'},
-    {who:'ai',text:"Perfect, Anna! You're booked for 9:30 tomorrow. We'll see you then — feel better soon 🦷",time:'01:17'}
+    {who:'ai',text:"Perfect, Anna! You're booked for 9:30 tomorrow. We'll see you then — drive safe until then 🔧",time:'01:17'}
   ];
 
   function addPMsg(item){
@@ -1437,10 +1447,10 @@ addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.m
 // ТОЛЬКО на сервере в /api/chat.js. Здесь остаются лишь данные для отрисовки виджета —
 // иконка, имя, приветствие и быстрые подсказки. Ключ и логика ассистента с фронтенда убраны.
 const PERSONAS={
-  dental:{
-    icon:'🦷',name:'Bright Smile Dental — Assistant',
-    greeting:"Hi! 👋 Welcome to Bright Smile Dental. I can help you book an appointment, check prices, or answer any questions. What can I do for you?",
-    sugs:["Book a cleaning","Prices?","Open Saturday?"]
+  roastery:{
+    icon:'☕',name:'Ember Roasting Co. — Assistant',
+    greeting:"Hey! ☕ Welcome to Ember Roasting Co. Ask me what's brewing today, check prices, or ask anything about the beans. What can I get you?",
+    sugs:["What's brewing today?","Prices?","Do you sell wholesale?"]
   },
   barber:{
     icon:'💈',name:'Fade District — Assistant',
@@ -1454,7 +1464,7 @@ const PERSONAS={
   }
 };
 
-let persona='dental';
+let persona='roastery';
 let history=[];
 let busy=false;
 
