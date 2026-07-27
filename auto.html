@@ -22,6 +22,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-b);line-height
 h1,h2,h3{font-family:var(--font-d);font-weight:600;letter-spacing:.005em;line-height:1.08;text-transform:uppercase}
 img{max-width:100%;display:block}
 .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+img.emj{width:1.22em;height:1.22em;vertical-align:-0.24em;display:inline-block}
 .eyebrow{font-family:var(--font-m);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
 .muted{color:var(--muted)}
@@ -62,11 +63,12 @@ nav{position:sticky;top:38px;z-index:60;display:flex;justify-content:space-betwe
 .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(12,15,20,.92) 10%,rgba(12,15,20,.5) 55%,rgba(12,15,20,.2) 100%)}
 .hero-inner{position:relative;z-index:1;max-width:660px}
 .hero h1{perspective:700px}
-.hero h1 .hw{display:inline-block}
+.hl-mask{display:block;overflow:hidden}
+.hl-line{display:inline-block;will-change:transform}
 .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:11.5px;letter-spacing:.1em;color:var(--amber);border:1px solid rgba(255,180,84,.4);padding:6px 14px;border-radius:100px;margin-bottom:22px;text-transform:uppercase}
 .hero-tag i{width:6px;height:6px;border-radius:50%;background:#5BD98A;box-shadow:0 0 8px #5BD98A}
 .hero h1{font-size:clamp(38px,5.6vw,70px);color:#fff;margin-bottom:20px}
-.hero h1 span{color:var(--amber)}
+.hero h1 em{color:var(--amber);font-style:normal}
 .hero p{font-size:17px;color:#B7C0CE;max-width:480px;margin-bottom:34px}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
 .hero-scroll{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.55);font-family:var(--font-m);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
@@ -74,8 +76,12 @@ nav{position:sticky;top:38px;z-index:60;display:flex;justify-content:space-betwe
 .hero-scroll i::after{content:"";position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--amber);animation:scrollDown 1.8s ease-in-out infinite}
 @keyframes scrollDown{to{top:100%}}
 
-.trust{background:var(--panel);padding:26px clamp(20px,5vw,48px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.trust-row{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;font-family:var(--font-m);font-size:12px;letter-spacing:.05em;color:#B7C0CE;text-transform:uppercase}
+.trust{background:var(--panel);padding:34px clamp(20px,5vw,48px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.trust-row{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.trust-badge{display:flex;align-items:center;gap:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;transition:border-color .2s,transform .2s}
+.trust-badge:hover{border-color:rgba(255,180,84,.5);transform:translateY(-2px)}
+.trust-badge .tb-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--amber);color:#161000;display:grid;place-items:center;font-size:15px;font-weight:800;box-shadow:0 6px 16px var(--amber-glow)}
+.trust-badge b{font-family:var(--font-b);font-size:13.5px;font-weight:700;color:#fff;line-height:1.3;text-transform:none;letter-spacing:0}
 
 section{padding:110px 0;position:relative}
 .sec-head{max-width:640px;margin:0 auto 52px}
@@ -83,14 +89,51 @@ section{padding:110px 0;position:relative}
 .sec-head h2{font-size:clamp(28px,3.6vw,44px);color:#fff}
 .gs{opacity:0;transform:translateY(38px)}
 
-.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative;z-index:1}
-.svc-card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:30px 24px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.services-grid{display:flex;gap:18px;position:relative;z-index:1;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;margin-bottom:-14px;scrollbar-width:thin;scrollbar-color:var(--amber) transparent;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%)}
+.svc-scroll-hint{text-align:center;font-family:var(--font-m);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:18px;display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* ---- WHAT'S WRONG WITH MY CAR — symptom diagnosis tool (Torque's signature interactive centerpiece) ---- */
+#diagnose{background:#0A0C10;position:relative;overflow:hidden;
+  background-image:linear-gradient(rgba(78,124,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(78,124,255,.07) 1px,transparent 1px);
+  background-size:44px 44px}
+#diagnose::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 10% 10%,rgba(78,124,255,.25),transparent 55%),radial-gradient(circle at 90% 90%,rgba(255,180,84,.15),transparent 55%);pointer-events:none}
+.diag-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:start;position:relative;z-index:1}
+.symptom-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.symptom{cursor:pointer;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border:1.5px solid var(--line);border-radius:var(--radius);padding:16px 16px;transition:border-color .2s,background .2s,transform .15s}
+.symptom:hover{border-color:rgba(78,124,255,.5);transform:translateY(-2px)}
+.symptom.active{border-color:var(--blue);background:rgba(78,124,255,.14);box-shadow:0 0 0 1px var(--blue),0 8px 24px var(--blue-glow)}
+.symptom .sy-ic{flex-shrink:0;width:34px;height:34px;border-radius:9px;background:var(--panel-2);display:grid;place-items:center;font-size:16px}
+.symptom.active .sy-ic{background:var(--blue)}
+.symptom b{font-size:14px;font-weight:500;color:#fff;line-height:1.3;text-transform:none}
+.diag-panel{position:sticky;top:110px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px;backdrop-filter:blur(16px)}
+.diag-eyebrow{font-family:var(--font-m);font-size:11px;letter-spacing:.14em;color:var(--amber);margin-bottom:18px;text-transform:uppercase}
+.diag-urgency{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:100px;font-family:var(--font-m);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px;font-weight:600}
+.diag-urgency.low{background:rgba(91,217,138,.15);color:#5BD98A}
+.diag-urgency.medium{background:rgba(255,180,84,.15);color:var(--amber)}
+.diag-urgency.urgent{background:rgba(228,87,61,.18);color:#E4573D}
+.diag-urgency i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.diag-empty{color:var(--muted);font-size:14px;line-height:1.6}
+.diag-services{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.diag-service-row{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:12px;border-bottom:1px dashed var(--line)}
+.diag-service-row b{color:#fff;font-size:14px;font-weight:600}
+.diag-service-row span{font-family:var(--font-m);font-size:13px;color:var(--amber)}
+.diag-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;padding-top:4px}
+.diag-total span{font-family:var(--font-m);font-size:12px;letter-spacing:.1em;color:var(--muted)}
+.diag-total b{font-family:var(--font-d);font-size:32px;color:var(--amber);text-shadow:0 0 24px var(--amber-glow)}
+.diag-note{font-size:12px;color:#4E5762;margin-bottom:20px}
+.diag-cta{width:100%;justify-content:center;text-align:center}
+.services-grid::-webkit-scrollbar{height:6px}
+.services-grid::-webkit-scrollbar-thumb{background:var(--amber);border-radius:100px}
+.svc-card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;flex:0 0 260px;scroll-snap-align:start}
 .svc-card:hover{transform:translateY(-6px);border-color:rgba(255,180,84,.4);box-shadow:0 20px 50px rgba(255,180,84,.1)}
-.svc-icon{width:50px;height:50px;border-radius:10px;background:var(--panel-2);display:grid;place-items:center;font-size:22px;margin-bottom:20px;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
-.svc-card:hover .svc-icon{transform:scale(1.1) rotate(-6deg)}
+.svc-photo{aspect-ratio:4/3;overflow:hidden}
+.svc-photo img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.svc-card:hover .svc-photo img{transform:scale(1.08)}
+.svc-body{padding:22px 22px 26px}
 .svc-card h3{font-size:18px;color:#fff;margin-bottom:10px}
-.svc-card p{font-size:14px;color:var(--muted);margin-bottom:16px;text-transform:none;font-family:var(--font-b)}
-.svc-price{font-family:var(--font-m);font-size:12.5px;color:var(--amber);font-weight:600}
+.svc-card p{font-size:14px;color:var(--muted);margin-bottom:18px;text-transform:none;font-family:var(--font-b)}
+.svc-price{display:inline-block;font-family:var(--font-d);font-size:24px;color:var(--amber);font-weight:600;letter-spacing:.01em}
 .svc-card.featured{border-color:var(--amber)}
 .svc-badge{position:absolute;top:16px;right:16px;background:var(--amber);color:#161000;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:100px;box-shadow:0 6px 16px var(--amber-glow)}
 
@@ -106,21 +149,26 @@ section{padding:110px 0;position:relative}
 .ai-pulse-dot::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--blue);animation:pulseRing 2s ease-out infinite}
 @keyframes pulseRing{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.6);opacity:0}}
 .ai-pulse-cta span{font-family:var(--font-d);font-weight:600;font-size:15.5px;text-transform:uppercase;letter-spacing:.02em}
+.diag-line{display:block;margin:22px 0 6px}
+.diag-line polyline{stroke-dasharray:420;stroke-dashoffset:420}
 .ai-stats{display:flex;gap:30px;margin-top:36px}
 .ai-stat b{display:block;font-family:var(--font-d);font-size:28px;color:var(--amber)}
 .ai-stat span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-family:var(--font-m)}
 
 .ai-phone{position:relative;z-index:1;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.12);border-radius:16px;
-  backdrop-filter:blur(20px);box-shadow:0 40px 90px rgba(0,0,0,.5);overflow:hidden;max-width:400px;margin:0 auto}
+  backdrop-filter:blur(20px);box-shadow:0 40px 90px rgba(0,0,0,.5);overflow:hidden;max-width:460px;margin:0 auto}
 .ai-phone-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
 .ai-phone-head .av{width:38px;height:38px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-size:17px}
-.ai-phone-head .nm{font-weight:600;font-size:14px;color:#fff}
+.ai-phone-head .nm{font-weight:600;font-size:14px;color:#fff;display:flex;align-items:center;gap:5px}
+.ai-phone-head .nm-sub{font-weight:400;color:var(--muted);font-size:12px}
+.ai-phone-head .verified{flex-shrink:0}
+.ai-phone-head .av{font-family:var(--font-d);font-weight:600;font-size:15px}
 .ai-phone-head .st{font-family:var(--font-m);font-size:10.5px;color:#7CFFC0;display:flex;align-items:center;gap:5px}
 .ai-phone-head .st::before{content:"";width:6px;height:6px;border-radius:50%;background:#7CFFC0;box-shadow:0 0 8px #7CFFC0;animation:dotPulse 1.8s ease-in-out infinite}
 @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.4}}
 .ai-phone-float{animation:phoneFloat 5s ease-in-out infinite}
 @keyframes phoneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.ai-phone-body{padding:20px;display:flex;flex-direction:column;gap:12px;min-height:290px}
+.ai-phone-body{padding:20px;display:flex;flex-direction:column;gap:12px;height:420px;overflow-y:auto}
 .ai-msg{max-width:82%;padding:11px 15px;border-radius:12px;font-size:13.5px;line-height:1.5;opacity:0;transform:translateY(10px)}
 .ai-msg.c{align-self:flex-start;background:var(--panel-2);color:var(--ink);border-bottom-left-radius:4px}
 .ai-msg.a{align-self:flex-end;background:var(--amber);color:#161000;border-bottom-right-radius:4px;font-weight:600;box-shadow:0 6px 20px var(--amber-glow)}
@@ -207,8 +255,11 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
 @media(max-width:980px){
   .nav-links{display:none}
   .nav-toggle{display:block}
-  .services-grid{grid-template-columns:repeat(2,1fr)}
+  .trust-row{grid-template-columns:repeat(2,1fr)}
+  .svc-card{flex-basis:220px}
   .ai-grid{grid-template-columns:1fr}
+  .diag-grid{grid-template-columns:1fr}
+  .diag-panel{position:static}
   .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;height:auto}
   .gallery-grid a:first-child{grid-row:auto;grid-column:1/3;height:280px}
   .gallery-grid a{height:180px}
@@ -219,7 +270,9 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
   .footer-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:560px){
-  .services-grid{grid-template-columns:1fr}
+  .svc-card{flex-basis:78vw}
+  .trust-row{grid-template-columns:1fr}
+  .symptom-grid{grid-template-columns:1fr}
   .about-stats{flex-wrap:wrap;row-gap:16px}
   .about-stat{flex:0 0 50%}
   .footer-grid{grid-template-columns:1fr}
@@ -233,7 +286,7 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
 
 <div class="renlo-bar">
   <span>👋 You're viewing a <b>website concept</b> made by RENLO</span>
-  <a href="../index.html#work" class="renlo-back">
+  <a href="index.html#work" class="renlo-back">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
     Back to Renlo
   </a>
@@ -243,6 +296,7 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
   <a href="#top" class="logo"><span class="logo-mark">T</span> TORQUE AUTO</a>
   <div class="nav-links">
     <a href="#services">Services</a>
+    <a href="#diagnose">Diagnose It</a>
     <a href="#assistant">AI Assistant</a>
     <a href="#gallery">Gallery</a>
     <a href="#reviews">Reviews</a>
@@ -257,11 +311,11 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
   </div>
   <div class="hero-inner">
     <span class="hero-tag"><i></i> Drop-offs open today</span>
-    <h1>Honest repairs.<br>No <span>upsell theater.</span></h1>
+    <h1><span class="hl-mask"><span class="hl-line">Honest repairs.</span></span><span class="hl-mask"><span class="hl-line">No <em>upsell theater.</em></span></span></h1>
     <p>Diagnostics, brakes, and full maintenance from techs who show you the part before they charge you for it — booked by an assistant that answers before you finish typing.</p>
     <div class="hero-cta">
       <a href="#book" class="btn btn-amber">Book Drop-off →</a>
-      <a href="#assistant" class="btn btn-line">Meet the AI assistant</a>
+      <a href="#assistant" class="btn btn-line">Meet Ace →</a>
     </div>
   </div>
   <div class="hero-scroll"><i></i>Scroll</div>
@@ -269,10 +323,10 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
 
 <div class="trust">
   <div class="trust-row">
-    <span>✓ Free diagnostic with any repair</span>
-    <span>✓ 12-month parts &amp; labor warranty</span>
-    <span>✓ Loaner cars available</span>
-    <span>✓ Text updates while we work</span>
+    <div class="trust-badge"><span class="tb-ic">✓</span><b>Free diagnostic with any repair</b></div>
+    <div class="trust-badge"><span class="tb-ic">✓</span><b>12-month parts &amp; labor warranty</b></div>
+    <div class="trust-badge"><span class="tb-ic">✓</span><b>Loaner cars available</b></div>
+    <div class="trust-badge"><span class="tb-ic">✓</span><b>Text updates while we work</b></div>
   </div>
 </div>
 
@@ -283,10 +337,68 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
       <h2>Every job, priced upfront</h2>
     </div>
     <div class="services-grid">
-      <div class="svc-card"><div class="svc-icon">🔧</div><h3>Diagnostics</h3><p>Full scan, plain-English report, no pressure.</p><div class="svc-price">From $49</div></div>
-      <div class="svc-card"><div class="svc-icon">🛞</div><h3>Brakes &amp; Rotors</h3><p>Pads, rotors, fluid flush — done same day.</p><div class="svc-price">From $180</div></div>
-      <div class="svc-card featured"><span class="svc-badge">Most booked</span><div class="svc-icon">🛢️</div><h3>Oil &amp; Maintenance</h3><p>Synthetic oil, filters, full multi-point check.</p><div class="svc-price">From $65</div></div>
-      <div class="svc-card"><div class="svc-icon">⚙️</div><h3>Engine &amp; Transmission</h3><p>Major repairs with a written warranty, every time.</p><div class="svc-price">Free quote</div></div>
+      <div class="svc-card">
+        <div class="svc-photo"><img src="https://images.pexels.com/photos/12271949/pexels-photo-12271949.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Professional OBD-II diagnostic scanner"></div>
+        <div class="svc-body"><h3>Diagnostics</h3><p>Full OBD-II scan across every system — plain-English report, zero guesswork.</p><div class="svc-price">From $49</div></div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-photo"><img src="https://images.pexels.com/photos/34277923/pexels-photo-34277923.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Clean disc brake system with caliper"></div>
+        <div class="svc-body"><h3>Brakes &amp; Rotors</h3><p>OEM-grade pads and rotors, fluid flush included — done same day.</p><div class="svc-price">From $180</div></div>
+      </div>
+      <div class="svc-card featured">
+        <span class="svc-badge">Most booked</span>
+        <div class="svc-photo"><img src="https://images.pexels.com/photos/7541352/pexels-photo-7541352.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Close-up of an engine oil cap"></div>
+        <div class="svc-body"><h3>Oil &amp; Maintenance</h3><p>Full-synthetic oil, premium filter, 21-point inspection — not just a top-up.</p><div class="svc-price">From $65</div></div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-photo"><img src="https://images.pexels.com/photos/32725839/pexels-photo-32725839.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Detailed top-down view of a car engine"></div>
+        <div class="svc-body"><h3>Engine &amp; Transmission</h3><p>Major repairs backed by a written 12-month warranty, every time.</p><div class="svc-price">Free quote</div></div>
+      </div>
+    </div>
+    <div class="svc-scroll-hint">← drag to see every bay →</div>
+  </div>
+</section>
+
+<!-- ============ WHAT'S WRONG WITH MY CAR — symptom diagnosis tool ============ -->
+<section id="diagnose">
+  <div class="wrap">
+    <div class="sec-head center gs">
+      <div class="eyebrow" style="justify-content:center">What's it doing?</div>
+      <h2>Tell us the symptoms. We'll tell you what it probably is.</h2>
+    </div>
+    <div class="diag-grid gs">
+      <div class="symptom-grid">
+        <div class="symptom" data-service="Brakes &amp; Rotors" data-min="150" data-max="220" data-urgency="urgent">
+          <span class="sy-ic">🛞</span><b>Grinding noise when braking</b>
+        </div>
+        <div class="symptom" data-service="Diagnostics" data-min="49" data-max="90" data-urgency="medium">
+          <span class="sy-ic">💡</span><b>Check engine light is on</b>
+        </div>
+        <div class="symptom" data-service="Diagnostics" data-min="49" data-max="180" data-urgency="urgent">
+          <span class="sy-ic">🔑</span><b>Won't start</b>
+        </div>
+        <div class="symptom" data-service="Diagnostics" data-min="49" data-max="120" data-urgency="medium">
+          <span class="sy-ic">〰️</span><b>Rough idle or hesitation</b>
+        </div>
+        <div class="symptom" data-service="Brakes &amp; Rotors" data-min="120" data-max="220" data-urgency="medium">
+          <span class="sy-ic">🚗</span><b>Steering wheel shakes</b>
+        </div>
+        <div class="symptom" data-service="Engine &amp; Transmission" data-min="80" data-max="400" data-urgency="urgent">
+          <span class="sy-ic">🔥</span><b>Burning smell</b>
+        </div>
+        <div class="symptom" data-service="Engine &amp; Transmission" data-min="60" data-max="350" data-urgency="medium">
+          <span class="sy-ic">💧</span><b>Leaking fluid underneath</b>
+        </div>
+        <div class="symptom" data-service="Oil &amp; Maintenance" data-min="65" data-max="90" data-urgency="low">
+          <span class="sy-ic">🛢️</span><b>Just due for an oil change</b>
+        </div>
+      </div>
+      <div class="diag-panel">
+        <div class="diag-eyebrow">// Likely diagnosis</div>
+        <div id="diagBody">
+          <p class="diag-empty">Tap what's going on with your car — we'll show you what it's probably going to take to fix, and how urgent it is.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -299,12 +411,15 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
     <div class="ai-grid">
       <div class="ai-copy gs">
         <div class="eyebrow">Never miss a drop-off</div>
-        <h2>Car acting up?<br>Just ask.</h2>
-        <p>Every visitor gets an assistant that knows the real bay schedule and real pricing — and books the drop-off before the panic wears off.</p>
+        <h2>Meet Ace.<br>Car acting up? Just ask.</h2>
+        <p>Ace knows the real bay schedule and real pricing — and books the drop-off before the panic wears off.</p>
         <div class="ai-pulse-cta">
           <span class="ai-pulse-dot">🔧</span>
           <span>Ask it something below →</span>
         </div>
+        <svg class="diag-line" viewBox="0 0 300 40" width="240" height="30" aria-hidden="true">
+          <polyline points="0,20 40,20 55,5 70,35 85,20 120,20 135,8 150,32 165,20 300,20" fill="none" stroke="var(--amber)" stroke-width="2"/>
+        </svg>
         <div class="ai-stats">
           <div class="ai-stat"><b id="cnt-answered">0</b><span>Answered today</span></div>
           <div class="ai-stat"><b>&lt;5s</b><span>Response time</span></div>
@@ -314,8 +429,8 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
       <div class="ai-phone-float">
       <div class="ai-phone glass gs">
         <div class="ai-phone-head">
-          <div class="av">🔧</div>
-          <div><div class="nm">Torque Assistant</div><div class="st">Online now</div></div>
+          <div class="av">A</div>
+          <div><div class="nm">Ace<svg class="verified" width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#4E7CFF"/><path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nm-sub">· Torque Auto</span></div><div class="st">Online now</div></div>
         </div>
         <div class="ai-phone-body" id="aiChatBody"></div>
         <div class="ai-phone-input">
@@ -449,7 +564,7 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
   <div class="wrap">
     <div class="cta-band gs">
       <h2>Something feels off? Get it checked before it gets expensive.</h2>
-      <a href="#assistant" class="btn btn-line">Ask the Assistant →</a>
+      <a href="#assistant" class="btn btn-line">Ask Ace →</a>
     </div>
   </div>
 </section>
@@ -481,7 +596,7 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
     </div>
     <div class="footer-bottom">
       <span>© 2026 Torque Auto Service. All rights reserved.</span>
-      <span>Fictional concept business — <a href="../index.html#work">built to demo a Renlo website ↗</a></span>
+      <span>Fictional concept business — <a href="index.html#work">built to demo a Renlo website ↗</a></span>
     </div>
   </div>
 </footer>
@@ -495,59 +610,128 @@ footer{background:#0D0F14;color:var(--muted);padding:70px 0 30px;border-top:1px 
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-/* hero headline: 3D word-by-word reveal */
+/* ---------- APPLE EMOJI ENGINE ---------- */
+const EMOJI_RE=/(\p{Extended_Pictographic}(?:️)?(?:‍\p{Extended_Pictographic}(?:️)?)*)/gu;
+function emojiUrl(seq){
+  const cps=[...seq].map(c=>c.codePointAt(0).toString(16)).filter(cp=>cp!=='fe0f');
+  return 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/'+cps.join('-')+'.png';
+}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function emojify(text){
+  return escapeHtml(text).replace(EMOJI_RE,m=>
+    '<img class="emj" src="'+emojiUrl(m)+'" alt="'+m+'" onerror="this.outerHTML=this.alt">');
+}
+/* replace emojis in all static text on the page */
 (function(){
-  const h1=document.querySelector('.hero h1');
-  if(!h1)return;
-  function wrapWords(node){
-    [...node.childNodes].forEach(child=>{
-      if(child.nodeType===3){
-        const frag=document.createDocumentFragment();
-        child.nodeValue.split(/(\s+)/).forEach(part=>{
-          if(part===''){return;}
-          if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(part));return;}
-          const s=document.createElement('span');
-          s.className='hw';s.textContent=part;
-          frag.appendChild(s);
-        });
-        node.replaceChild(frag,child);
-      }else if(child.nodeType===1){
-        if(child.tagName==='EM'||child.tagName==='SPAN'){
-          child.classList.add('hw');
-        }else{
-          wrapWords(child);
-        }
-      }
-    });
-  }
-  wrapWords(h1);
-  const words=h1.querySelectorAll('.hw');
-  gsap.set(words,{opacity:0,y:44,rotateX:-75,transformOrigin:'50% 100%'});
-  gsap.to(words,{opacity:1,y:0,rotateX:0,duration:.85,stagger:.045,ease:'power3.out',delay:.15});
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+    acceptNode:n=>(n.parentElement&&!/^(SCRIPT|STYLE)$/.test(n.parentElement.tagName)&&EMOJI_RE.test(n.nodeValue))?
+      NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT});
+  const nodes=[];let n;while(n=walker.nextNode())nodes.push(n);
+  nodes.forEach(node=>{
+    const span=document.createElement('span');
+    span.innerHTML=emojify(node.nodeValue);
+    node.parentNode.replaceChild(span,node);
+  });
+})();
+
+/* hero headline: line-mask reveal — each line slides up from behind a hidden mask (Torque's signature load-in, distinct from the char/word reveals used elsewhere) */
+(function(){
+  const lines=document.querySelectorAll('.hero h1 .hl-line');
+  if(!lines.length)return;
+  gsap.set(lines,{yPercent:110});
+  gsap.to(lines,{yPercent:0,duration:.8,stagger:.12,ease:'power4.out',delay:.15});
 })();
 
 gsap.to('#heroImg',{yPercent:14,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
 document.querySelectorAll('.gs').forEach(el=>{
   gsap.to(el,{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%'}});
 });
-[['.services-grid','.svc-card'],['.gallery-grid','.gallery-grid a'],['.process-grid','.proc-card'],['.testi-grid','.testi-card'],['.faq-list','.faq-item']].forEach(([wrap,sel])=>{
+[['.gallery-grid','.gallery-grid a'],['.process-grid','.proc-card'],['.testi-grid','.testi-card'],['.faq-list','.faq-item']].forEach(([wrap,sel])=>{
   const items=document.querySelectorAll(wrap+' '+sel);
   gsap.set(items,{opacity:0,y:30});
   gsap.to(items,{opacity:1,y:0,duration:.7,stagger:.12,ease:'power3.out',scrollTrigger:{trigger:wrap,start:'top 85%'}});
 });
+/* services: horizontal filmstrip slide-in (distinct from the fade-up cards used elsewhere) */
+(function(){
+  const cards=document.querySelectorAll('.svc-card');
+  gsap.set(cards,{opacity:0,x:60});
+  gsap.to(cards,{opacity:1,x:0,duration:.6,stagger:.1,ease:'power3.out',scrollTrigger:{trigger:'.services-grid',start:'top 88%'}});
+})();
+/* diagnostic line draw-in */
+(function(){
+  const line=document.querySelector('.diag-line polyline');
+  if(!line)return;
+  gsap.to(line,{strokeDashoffset:0,duration:1.3,ease:'power2.inOut',scrollTrigger:{trigger:'#assistant',start:'top 70%',once:true}});
+})();
 function countUp(el,to,dur){
   gsap.fromTo(el,{innerText:0},{innerText:to,duration:dur,snap:{innerText:1},ease:'power1.out',
     scrollTrigger:{trigger:el,start:'top 90%',once:true}});
 }
 countUp(document.getElementById('cnt-answered'),38,1.6);
 
+/* ---------- WHAT'S WRONG WITH MY CAR — symptom diagnosis tool ---------- */
+(function(){
+  const symptoms=document.querySelectorAll('.symptom');
+  const diagBody=document.getElementById('diagBody');
+  if(!symptoms.length||!diagBody)return;
+
+  const urgencyRank={low:0,medium:1,urgent:2};
+  const urgencyLabel={low:'Low priority',medium:'Worth booking soon',urgent:'Book this first'};
+
+  symptoms.forEach(s=>{
+    s.addEventListener('click',()=>{
+      s.classList.toggle('active');
+      render();
+    });
+  });
+
+  function render(){
+    const active=[...symptoms].filter(s=>s.classList.contains('active'));
+    if(!active.length){
+      diagBody.innerHTML='<p class="diag-empty">Tap what\'s going on with your car — we\'ll show you what it\'s probably going to take to fix, and how urgent it is.</p>';
+      return;
+    }
+    const byService={};
+    let topUrgency='low';
+    active.forEach(s=>{
+      const service=s.dataset.service;
+      const min=parseFloat(s.dataset.min);
+      const max=parseFloat(s.dataset.max);
+      const urgency=s.dataset.urgency;
+      if(urgencyRank[urgency]>urgencyRank[topUrgency])topUrgency=urgency;
+      if(!byService[service]||max>byService[service].max){
+        byService[service]={min,max};
+      }
+    });
+    let totalMin=0,totalMax=0;
+    const rows=Object.entries(byService).map(([service,r])=>{
+      totalMin+=r.min;totalMax+=r.max;
+      return '<div class="diag-service-row"><b>'+service+'</b><span>$'+r.min+'–'+r.max+'</span></div>';
+    }).join('');
+    diagBody.innerHTML=
+      '<div class="diag-urgency '+topUrgency+'"><i></i>'+urgencyLabel[topUrgency]+'</div>'+
+      '<div class="diag-services">'+rows+'</div>'+
+      '<div class="diag-total"><span>ESTIMATED RANGE</span><b>$'+totalMin+'–'+totalMax+'</b></div>'+
+      '<p class="diag-note">Free diagnostic confirms the exact fix before any work starts</p>'+
+      '<a href="#assistant" class="btn btn-amber diag-cta">Ask Ace About This →</a>';
+    gsap.fromTo('.diag-total b',{scale:1.12},{scale:1,duration:.4,ease:'back.out(2)'});
+  }
+})();
+
+/* about stats: simple GPU-friendly fade-up (the setInterval digit-scramble this replaced was visibly janky on real devices) */
+(function(){
+  const stats=document.querySelectorAll('.about-stat b');
+  gsap.set(stats,{opacity:0,y:14});
+  gsap.to(stats,{opacity:1,y:0,duration:.6,stagger:.1,ease:'power2.out',scrollTrigger:{trigger:'.about-stats',start:'top 90%',once:true}});
+})();
+
 (function(){
   const body=document.getElementById('aiChatBody');
   const script=[
-    {who:'c',text:"Car died 😬 can you take it Monday?"},
-    {who:'a',text:'Yes — drop-off at 8:00 works?'},
+    {who:'c',text:"Car died this morning 😬 can you take it Monday?"},
+    {who:'a',text:"Yes — 8:00 drop-off, we'll run diagnostics first thing."},
     {who:'c',text:"Perfect. It's a Golf mk7"},
-    {who:'a',text:'Noted ✅ Monday 8:00, we got you'}
+    {who:'a',text:'Got it — Monday 8:00, Golf mk7, diagnostics first. See you then.'}
   ];
   let playing=false;
   function play(){
