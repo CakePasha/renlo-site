@@ -375,7 +375,10 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .btn-amber::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
   background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);transition:left .55s ease}
 .btn-amber:hover::after{left:130%}
-.work-card{transform-style:preserve-3d;will-change:transform}
+/* the will-change/preserve-3d hints below only matter for the desktop hover-tilt effect —
+   forcing them on mobile too just adds GPU compositing overhead to cards that also contain
+   live iframes, for zero visual benefit since the tilt JS never runs there anyway */
+@media(hover:hover){.work-card{transform-style:preserve-3d;will-change:transform}}
 
 
 /* ---------- founder strip ---------- */
@@ -548,18 +551,24 @@ footer .legal a:hover{color:var(--amber)}
     overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
     scroll-snap-type:x mandatory;scrollbar-width:none;
     max-width:none;margin:0;padding:4px 4px 6px;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
-    mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
   }
   /* touch-action deliberately left at its default (auto) — pinning it to pan-x blocked the
      browser's normal gesture disambiguation, so a vertical drag that started on top of one of
      these rows couldn't scroll the page at all. Auto lets it decide per-touch, same as any
      normal horizontally-scrolling carousel nested in a vertically-scrolling page. */
+  /* the edge-fade mask is skipped on .work-grid on purpose — it's the only one of these rows
+     whose cards contain live embedded iframes (the 3 concept sites), and mobile Safari has
+     known instability compositing mask-image over iframe content. Not worth the risk for a
+     cosmetic fade; the 3 lightweight card rows below still get it. */
+  .cards,.benefits,.steps,.plans,.case-stats{
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
+  }
   .cards::-webkit-scrollbar,.benefits::-webkit-scrollbar,.steps::-webkit-scrollbar,.plans::-webkit-scrollbar,
   .work-grid::-webkit-scrollbar,.case-stats::-webkit-scrollbar{display:none}
-  .cards.at-start,.benefits.at-start,.steps.at-start,.plans.at-start,.work-grid.at-start,.case-stats.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%)}
-  .cards.at-end,.benefits.at-end,.steps.at-end,.plans.at-end,.work-grid.at-end,.case-stats.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 100%)}
-  .cards.at-start.at-end,.benefits.at-start.at-end,.steps.at-start.at-end,.plans.at-start.at-end,.work-grid.at-start.at-end,.case-stats.at-start.at-end{-webkit-mask-image:none;mask-image:none}
+  .cards.at-start,.benefits.at-start,.steps.at-start,.plans.at-start,.case-stats.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%)}
+  .cards.at-end,.benefits.at-end,.steps.at-end,.plans.at-end,.case-stats.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 100%)}
+  .cards.at-start.at-end,.benefits.at-start.at-end,.steps.at-start.at-end,.plans.at-start.at-end,.case-stats.at-start.at-end{-webkit-mask-image:none;mask-image:none}
   .cards>*,.benefits>*,.steps>*,.plans>*,.work-grid>*,.case-stats>*{scroll-snap-align:start;flex-shrink:0}
   .cards .card{flex:0 0 82%;max-width:400px}
   .benefits .benefit{flex:0 0 76%;max-width:300px}
