@@ -528,22 +528,43 @@ footer .legal a:hover{color:var(--amber)}
 @media(max-width:980px){
   .hero{grid-template-columns:1fr;padding-top:110px}
   .phone{margin:0 auto}
-  .cards,.steps,.plans,.benefits{grid-template-columns:1fr}
   .case{grid-template-columns:1fr}
   .nav-links a:not(.btn){display:none}
   /* heavy blur is expensive to repaint on mobile GPUs — cut it down, background opacity already carries the look */
   nav{backdrop-filter:blur(4px);background:var(--nav-bg-strong)}
   .phone{backdrop-filter:blur(8px)}
   .chat-head,.tabs{backdrop-filter:none}
-  /* too much scrolling on mobile — show only the 3 strongest benefit cards instead of all 6 */
-  .benefit:nth-child(3),.benefit:nth-child(4),.benefit:nth-child(5){display:none}
-  /* one lost-lead example is plenty on a phone */
-  .cards .card:nth-child(2){display:none}
-  .cards{grid-template-columns:1fr;max-width:460px}
   /* desktop section padding (110px) reads as a giant empty hole on a short mobile screen — cut it way down */
   section{padding:56px clamp(20px,5vw,64px)}
   .sec-head{margin-bottom:34px}
   .founder-strip{margin-top:24px}
+
+  /* horizontal swipe-rows: instead of stacking every card top-to-bottom (tall page),
+     these 4 rows scroll sideways within their own box. No negative margins here —
+     that's exactly what caused the whole-page horizontal wobble bug before (see
+     project notes) — width stays inside the section's normal padding, only the
+     row itself scrolls. */
+  .cards,.benefits,.steps,.plans{
+    display:flex;grid-template-columns:none;align-items:stretch;gap:14px;
+    overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+    touch-action:pan-x;scroll-snap-type:x mandatory;scrollbar-width:none;
+    max-width:none;margin:0;padding:4px 4px 6px;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%);
+  }
+  .cards::-webkit-scrollbar,.benefits::-webkit-scrollbar,.steps::-webkit-scrollbar,.plans::-webkit-scrollbar{display:none}
+  .cards.at-start,.benefits.at-start,.steps.at-start,.plans.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%)}
+  .cards.at-end,.benefits.at-end,.steps.at-end,.plans.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%)}
+  .cards.at-start.at-end,.benefits.at-start.at-end,.steps.at-start.at-end,.plans.at-start.at-end{-webkit-mask-image:none;mask-image:none}
+  .cards>*,.benefits>*,.steps>*,.plans>*{scroll-snap-align:start;flex-shrink:0}
+  .cards .card{flex:0 0 82%;max-width:400px}
+  .benefits .benefit{flex:0 0 76%;max-width:300px}
+  .steps .step{flex:0 0 80%;max-width:320px}
+  .plans .plan{flex:0 0 84%;max-width:340px}
+
+  .row-dots{display:flex;justify-content:center;gap:8px;margin-top:4px}
+  .row-dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .25s,transform .25s;cursor:pointer}
+  .row-dots i.active{background:var(--amber);transform:scale(1.4)}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -1240,6 +1261,37 @@ document.querySelectorAll('.cards,.steps,.plans,.work-grid,.benefits').forEach(g
   [...grid.children].forEach((c,i)=>c.style.transitionDelay=(i*0.13)+'s');
 });
 document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.step').forEach(el=>io.observe(el));
+
+/* mobile swipe-rows: dot indicator + edge-fade state for the 4 horizontal-scroll sections */
+if(matchMedia('(max-width:980px)').matches){
+  document.querySelectorAll('#problem .cards,#why .benefits,#how .steps,#pricing .plans').forEach(row=>{
+    const items=[...row.children].filter(el=>getComputedStyle(el).display!=='none');
+    if(items.length<2)return;
+    const dots=document.createElement('div');
+    dots.className='row-dots';
+    items.forEach((it,i)=>{
+      const d=document.createElement('i');
+      if(i===0)d.classList.add('active');
+      d.addEventListener('click',()=>it.scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'}));
+      dots.appendChild(d);
+    });
+    row.insertAdjacentElement('afterend',dots);
+    const dotEls=[...dots.children];
+    function update(){
+      const center=row.scrollLeft+row.clientWidth/2;
+      let idx=0,best=Infinity;
+      items.forEach((it,i)=>{
+        const d=Math.abs((it.offsetLeft+it.offsetWidth/2)-center);
+        if(d<best){best=d;idx=i;}
+      });
+      dotEls.forEach((d,i)=>d.classList.toggle('active',i===idx));
+      row.classList.toggle('at-start',row.scrollLeft<=8);
+      row.classList.toggle('at-end',row.scrollLeft+row.clientWidth>=row.scrollWidth-8);
+    }
+    update();
+    row.addEventListener('scroll',update,{passive:true});
+  });
+}
 
 /* faq */
 document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=>{
