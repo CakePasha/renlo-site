@@ -546,22 +546,26 @@ footer .legal a:hover{color:var(--amber)}
   .cards,.benefits,.steps,.plans,.work-grid,.case-stats{
     display:flex;grid-template-columns:none;align-items:stretch;gap:14px;
     overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
-    touch-action:pan-x;scroll-snap-type:x mandatory;scrollbar-width:none;
+    scroll-snap-type:x mandatory;scrollbar-width:none;
     max-width:none;margin:0;padding:4px 4px 6px;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%);
-    mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
   }
+  /* touch-action deliberately left at its default (auto) — pinning it to pan-x blocked the
+     browser's normal gesture disambiguation, so a vertical drag that started on top of one of
+     these rows couldn't scroll the page at all. Auto lets it decide per-touch, same as any
+     normal horizontally-scrolling carousel nested in a vertically-scrolling page. */
   .cards::-webkit-scrollbar,.benefits::-webkit-scrollbar,.steps::-webkit-scrollbar,.plans::-webkit-scrollbar,
   .work-grid::-webkit-scrollbar,.case-stats::-webkit-scrollbar{display:none}
-  .cards.at-start,.benefits.at-start,.steps.at-start,.plans.at-start,.work-grid.at-start,.case-stats.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%)}
-  .cards.at-end,.benefits.at-end,.steps.at-end,.plans.at-end,.work-grid.at-end,.case-stats.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%)}
+  .cards.at-start,.benefits.at-start,.steps.at-start,.plans.at-start,.work-grid.at-start,.case-stats.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 14px),transparent 100%)}
+  .cards.at-end,.benefits.at-end,.steps.at-end,.plans.at-end,.work-grid.at-end,.case-stats.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 100%)}
   .cards.at-start.at-end,.benefits.at-start.at-end,.steps.at-start.at-end,.plans.at-start.at-end,.work-grid.at-start.at-end,.case-stats.at-start.at-end{-webkit-mask-image:none;mask-image:none}
   .cards>*,.benefits>*,.steps>*,.plans>*,.work-grid>*,.case-stats>*{scroll-snap-align:start;flex-shrink:0}
   .cards .card{flex:0 0 82%;max-width:400px}
   .benefits .benefit{flex:0 0 76%;max-width:300px}
   .steps .step{flex:0 0 80%;max-width:320px}
-  .plans .plan{flex:0 0 84%;max-width:340px}
-  .work-grid .work-card{flex:0 0 86%;max-width:380px}
+  .plans .plan{flex:0 0 78%;max-width:320px}
+  .work-grid .work-card{flex:0 0 78%;max-width:330px}
   .case-stats .cs{flex:0 0 46%;max-width:210px}
 
   .row-dots{display:flex;justify-content:center;gap:8px;margin-top:4px}
@@ -1279,6 +1283,12 @@ if(matchMedia('(max-width:980px)').matches){
   document.querySelectorAll('#problem .cards,#why .benefits,#how .steps,#pricing .plans,#work .work-grid,#trust .case-stats').forEach(row=>{
     const items=[...row.children].filter(el=>getComputedStyle(el).display!=='none');
     if(items.length<2)return;
+    /* these cards also carry the page's scroll-triggered fade-up '.reveal' class, meant for
+       scrolling DOWN the page. Left as-is, it also fires per-card as you swipe SIDEWAYS into
+       a new one (IntersectionObserver sees it enter the row's clipped viewport) — that's the
+       "pops up, then settles" jump. In a swipe-row the paging motion itself is the animation,
+       so make every card fully visible up front instead of re-playing that entrance per swipe. */
+    items.forEach(it=>it.classList.add('in'));
     const dots=document.createElement('div');
     dots.className='row-dots';
     items.forEach((it,i)=>{
