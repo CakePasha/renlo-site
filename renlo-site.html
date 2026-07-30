@@ -361,7 +361,6 @@ section{padding:110px clamp(20px,5vw,64px);max-width:1440px;margin:0 auto;positi
 .work-cta:hover{background:var(--amber);color:#000;box-shadow:0 8px 28px rgba(255,180,84,.35)}
 .work-cta-ghost{color:var(--ink);border-color:var(--line)}
 .work-cta-ghost:hover{background:transparent;color:var(--amber);border-color:var(--amber);box-shadow:none}
-@media(max-width:980px){.work-grid{grid-template-columns:1fr}}
 
 
 /* ---------- benefits ---------- */
@@ -544,7 +543,7 @@ footer .legal a:hover{color:var(--amber)}
      that's exactly what caused the whole-page horizontal wobble bug before (see
      project notes) — width stays inside the section's normal padding, only the
      row itself scrolls. */
-  .cards,.benefits,.steps,.plans{
+  .cards,.benefits,.steps,.plans,.work-grid,.case-stats{
     display:flex;grid-template-columns:none;align-items:stretch;gap:14px;
     overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
     touch-action:pan-x;scroll-snap-type:x mandatory;scrollbar-width:none;
@@ -552,15 +551,18 @@ footer .legal a:hover{color:var(--amber)}
     -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%);
     mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%);
   }
-  .cards::-webkit-scrollbar,.benefits::-webkit-scrollbar,.steps::-webkit-scrollbar,.plans::-webkit-scrollbar{display:none}
-  .cards.at-start,.benefits.at-start,.steps.at-start,.plans.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%)}
-  .cards.at-end,.benefits.at-end,.steps.at-end,.plans.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%)}
-  .cards.at-start.at-end,.benefits.at-start.at-end,.steps.at-start.at-end,.plans.at-start.at-end{-webkit-mask-image:none;mask-image:none}
-  .cards>*,.benefits>*,.steps>*,.plans>*{scroll-snap-align:start;flex-shrink:0}
+  .cards::-webkit-scrollbar,.benefits::-webkit-scrollbar,.steps::-webkit-scrollbar,.plans::-webkit-scrollbar,
+  .work-grid::-webkit-scrollbar,.case-stats::-webkit-scrollbar{display:none}
+  .cards.at-start,.benefits.at-start,.steps.at-start,.plans.at-start,.work-grid.at-start,.case-stats.at-start{-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%)}
+  .cards.at-end,.benefits.at-end,.steps.at-end,.plans.at-end,.work-grid.at-end,.case-stats.at-end{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%)}
+  .cards.at-start.at-end,.benefits.at-start.at-end,.steps.at-start.at-end,.plans.at-start.at-end,.work-grid.at-start.at-end,.case-stats.at-start.at-end{-webkit-mask-image:none;mask-image:none}
+  .cards>*,.benefits>*,.steps>*,.plans>*,.work-grid>*,.case-stats>*{scroll-snap-align:start;flex-shrink:0}
   .cards .card{flex:0 0 82%;max-width:400px}
   .benefits .benefit{flex:0 0 76%;max-width:300px}
   .steps .step{flex:0 0 80%;max-width:320px}
   .plans .plan{flex:0 0 84%;max-width:340px}
+  .work-grid .work-card{flex:0 0 86%;max-width:380px}
+  .case-stats .cs{flex:0 0 46%;max-width:210px}
 
   .row-dots{display:flex;justify-content:center;gap:8px;margin-top:4px}
   .row-dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .25s,transform .25s;cursor:pointer}
@@ -594,7 +596,7 @@ footer .legal a:hover{color:var(--amber)}
 .case-stats{display:flex;gap:36px;margin-top:30px}
 .cs .v{font-family:var(--font-d);font-weight:800;font-size:34px;color:var(--amber)}
 .cs .l{font-size:13px;color:var(--muted);font-family:var(--font-m)}
-@media(max-width:980px){.case{grid-template-columns:1fr}.case-stats{flex-wrap:wrap;row-gap:20px}}
+@media(max-width:980px){.case{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1262,9 +1264,19 @@ document.querySelectorAll('.cards,.steps,.plans,.work-grid,.benefits').forEach(g
 });
 document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.step').forEach(el=>io.observe(el));
 
-/* mobile swipe-rows: dot indicator + edge-fade state for the 4 horizontal-scroll sections */
+/* mobile swipe-rows: dot indicator + edge-fade state for the horizontal-scroll sections.
+   Active-dot tracking uses IntersectionObserver (not a scroll-position/offsetLeft read on
+   every 'scroll' event) — reading offsetLeft synchronously inside a scroll handler forces
+   the browser to flush layout on every single event, which is what made the pricing row in
+   particular feel laggy/juddery on longer card lists. IO callbacks are async and don't force
+   layout, so the swipe itself stays smooth; only the cheap at-start/at-end check runs on scroll. */
 if(matchMedia('(max-width:980px)').matches){
-  document.querySelectorAll('#problem .cards,#why .benefits,#how .steps,#pricing .plans').forEach(row=>{
+  const touchGuard=(()=>{let moved=false;
+    document.addEventListener('touchstart',()=>{moved=false;},{passive:true});
+    document.addEventListener('touchmove',()=>{moved=true;},{passive:true});
+    return ()=>moved;
+  })();
+  document.querySelectorAll('#problem .cards,#why .benefits,#how .steps,#pricing .plans,#work .work-grid,#trust .case-stats').forEach(row=>{
     const items=[...row.children].filter(el=>getComputedStyle(el).display!=='none');
     if(items.length<2)return;
     const dots=document.createElement('div');
@@ -1272,25 +1284,36 @@ if(matchMedia('(max-width:980px)').matches){
     items.forEach((it,i)=>{
       const d=document.createElement('i');
       if(i===0)d.classList.add('active');
-      d.addEventListener('click',()=>it.scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'}));
+      d.addEventListener('click',()=>{if(touchGuard())return;it.scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'});});
       dots.appendChild(d);
     });
     row.insertAdjacentElement('afterend',dots);
     const dotEls=[...dots.children];
-    function update(){
-      const center=row.scrollLeft+row.clientWidth/2;
-      let idx=0,best=Infinity;
-      items.forEach((it,i)=>{
-        const d=Math.abs((it.offsetLeft+it.offsetWidth/2)-center);
-        if(d<best){best=d;idx=i;}
+
+    const ratios=new Array(items.length).fill(0);
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        const i=items.indexOf(e.target);
+        if(i>=0)ratios[i]=e.intersectionRatio;
       });
-      dotEls.forEach((d,i)=>d.classList.toggle('active',i===idx));
+      let best=0;
+      ratios.forEach((r,i)=>{if(r>ratios[best])best=i;});
+      dotEls.forEach((d,i)=>d.classList.toggle('active',i===best));
+    },{root:row,threshold:[0,.25,.5,.75,1]});
+    items.forEach(it=>io.observe(it));
+
+    let raf=null;
+    function updateEdges(){
+      raf=null;
       row.classList.toggle('at-start',row.scrollLeft<=8);
       row.classList.toggle('at-end',row.scrollLeft+row.clientWidth>=row.scrollWidth-8);
     }
-    update();
-    row.addEventListener('scroll',update,{passive:true});
+    updateEdges();
+    row.addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(updateEdges);},{passive:true});
   });
+  document.querySelectorAll('#work .work-browser').forEach(a=>a.addEventListener('click',e=>{
+    if(touchGuard())e.preventDefault();
+  }));
 }
 
 /* faq */
@@ -1402,18 +1425,6 @@ document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=
 })();
 
 
-/* 3D tilt on work cards */
-(function(){
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches||matchMedia('(hover: none)').matches)return;
-  document.querySelectorAll('.work-card').forEach(card=>{
-    card.addEventListener('mousemove',e=>{
-      const r=card.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-      card.style.transform='translateY(-8px) perspective(900px) rotateY('+(x*6)+'deg) rotateX('+(-y*6)+'deg)';
-    });
-    card.addEventListener('mouseleave',()=>{card.style.transform='';});
-  });
-})();
 
 /* parallax orbs + scroll-driven color play (desktop only — the big blurred orb is too expensive to repaint on mobile scroll) */
 (function(){
