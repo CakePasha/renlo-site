@@ -844,7 +844,7 @@ footer .legal a:hover{color:var(--amber)}
           <span class="wb-tag">Concept site</span>
         </div>
         <div class="wb-frame">
-          <iframe src="roastery.html" loading="lazy" tabindex="-1" scrolling="no" title="Ember Roasting Co. concept site preview"></iframe>
+          <iframe data-src="roastery.html" tabindex="-1" scrolling="no" title="Ember Roasting Co. concept site preview"></iframe>
           <span class="wb-open">Open concept ↗</span>
         </div>
       </a>
@@ -867,7 +867,7 @@ footer .legal a:hover{color:var(--amber)}
           <span class="wb-tag">Concept site</span>
         </div>
         <div class="wb-frame">
-          <iframe src="barber.html" loading="lazy" tabindex="-1" scrolling="no" title="Fade District concept site preview"></iframe>
+          <iframe data-src="barber.html" tabindex="-1" scrolling="no" title="Fade District concept site preview"></iframe>
           <span class="wb-open">Open concept ↗</span>
         </div>
       </a>
@@ -890,7 +890,7 @@ footer .legal a:hover{color:var(--amber)}
           <span class="wb-tag">Concept site</span>
         </div>
         <div class="wb-frame">
-          <iframe src="auto.html" loading="lazy" tabindex="-1" scrolling="no" title="Torque Auto Service concept site preview"></iframe>
+          <iframe data-src="auto.html" tabindex="-1" scrolling="no" title="Torque Auto Service concept site preview"></iframe>
           <span class="wb-open">Open concept ↗</span>
         </div>
       </a>
@@ -1309,6 +1309,10 @@ if(matchMedia('(max-width:980px)').matches){
     row.insertAdjacentElement('afterend',dots);
     const dotEls=[...dots.children];
 
+    /* #work specifically: keep at most one heavy concept-site iframe mounted at a time.
+       Loading all 3 together (each a full separate site with its own GSAP/fonts/photos) is
+       what was crashing the tab on mobile — see the concept-iframe loader script below. */
+    const isWorkGrid=row.classList.contains('work-grid');
     const ratios=new Array(items.length).fill(0);
     const io=new IntersectionObserver(entries=>{
       entries.forEach(e=>{
@@ -1318,6 +1322,14 @@ if(matchMedia('(max-width:980px)').matches){
       let best=0;
       ratios.forEach((r,i)=>{if(r>ratios[best])best=i;});
       dotEls.forEach((d,i)=>d.classList.toggle('active',i===best));
+      if(isWorkGrid){
+        items.forEach((it,i)=>{
+          const f=it.querySelector('iframe');
+          if(!f)return;
+          if(i===best)window.__loadConceptFrame(f);
+          else if(ratios[i]===0)window.__unloadConceptFrame(f);
+        });
+      }
     },{root:row,threshold:[0,.25,.5,.75,1]});
     items.forEach(it=>io.observe(it));
 
@@ -1406,7 +1418,14 @@ document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=
   });
 })();
 
-/* scale the live concept-site iframes to fit their card */
+/* scale + load the live concept-site iframes to fit their card.
+   Loading is now hand-managed via data-src instead of native loading="lazy": each concept
+   iframe is a full separate site (its own GSAP/fonts/photos), and on the mobile swipe-row
+   native lazy-loading doesn't appear to respect the row's horizontal scroll-clipping — all 3
+   were loading together as soon as the section was vertically near-viewport, which is heavy
+   enough on a phone to crash the tab. On mobile we now load only the card currently in view
+   and unload the rest; on desktop (plain grid, no clipping) each loads once actually scrolled
+   near, same as before, just self-managed instead of relying on the browser's heuristic. */
 (function(){
   const BASE=1440;
   function fit(frame){
@@ -1418,13 +1437,20 @@ document.querySelectorAll('.q button').forEach(b=>b.addEventListener('click',()=
     frame.style.height=(h/scale)+'px';
     frame.style.transform='scale('+scale+')';
   }
-  const frames=document.querySelectorAll('.wb-frame iframe');
-  frames.forEach(f=>{
-    f.addEventListener('load',()=>fit(f));
-    fit(f);
-  });
+  const frames=[...document.querySelectorAll('.wb-frame iframe')];
+  frames.forEach(f=>{f.addEventListener('load',()=>fit(f));fit(f);});
   let t;
   addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>frames.forEach(fit),120)});
+
+  window.__loadConceptFrame=function(f){if(!f.getAttribute('src')&&f.dataset.src)f.src=f.dataset.src;};
+  window.__unloadConceptFrame=function(f){if(f.getAttribute('src'))f.removeAttribute('src');};
+
+  if(!matchMedia('(max-width:980px)').matches){
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){window.__loadConceptFrame(e.target);io.unobserve(e.target);}});
+    },{rootMargin:'400px'});
+    frames.forEach(f=>io.observe(f));
+  }
 })();
 
 /* work cards -> switch live demo persona
